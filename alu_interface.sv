@@ -22,7 +22,7 @@ interface alu_if(input bit clk, input bit rst);
   logic [`WIDTH:0] res;
   logic oflow,cout,g,l,e,err;
   
-  clocking drv_cb @(posedge clk);
+  clocking drv_cb @(posedge clk or posedge rst);
     default input #0 output #0;
     inout opa,opb,ce,mode,cin,inp_valid,cmd;
     input rst;

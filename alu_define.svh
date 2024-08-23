@@ -9,6 +9,6 @@
 //------------------------------------------------------------------------------
 
 `timescale 10ns/100ps //Time Unit (ns) / Precision(ps)
-`define WIDTH 8
+`define DATA_WIDTH 8
 `define NUM_TRANSACTIONS 4
 `define CMD_WIDTH 4

@@ -8,6 +8,7 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+
 class alu_seq_item extends uvm_sequence_item;
 
 
@@ -34,5 +35,23 @@ class alu_seq_item extends uvm_sequence_item;
 function new(string name ="alu_seq_item");
 super.new(name);
 endfunction
+
+
+constraint c1_mode
+  {
+    if( mode==0)cmd inside{[0:13]};
+    else cmd inside {[0:10]};
+                  
+  }
+ constraint c2_inp_valid 
+ {
+    inp_valid dist {0:=5,1:=10,2:=10,3:=10};
+                       
+ }
+constraint c3_cmd 
+ { 
+     cmd dist {[0:13]:=1};
+                  
+ }
 
 endclass

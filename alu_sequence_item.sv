@@ -8,6 +8,10 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+/*import uvm_pkg::*;
+`include "uvm_macros.svh"
+`include "alu_define.svh"*/
+
 class alu_seq_item extends uvm_sequence_item;
 
   rand bit ce;
@@ -49,4 +53,4 @@ class alu_seq_item extends uvm_sequence_item;
     cmd dist {[0: 13]:=1};                
   }
 
-endclass
+endclass: alu_seq_item

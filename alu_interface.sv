@@ -20,7 +20,7 @@ interface alu_if (input bit clk, input bit rst);
   logic [`DATA_WIDTH - 1: 0] opa;
   logic [`DATA_WIDTH - 1: 0] opb;
   
-  logic [`DATA_WIDTH : 0] res;
+  logic [`DATA_WIDTH: 0] res;
   logic oflow, cout, g, l, e, err;
   
   clocking drv_cb @(posedge clk or posedge rst);

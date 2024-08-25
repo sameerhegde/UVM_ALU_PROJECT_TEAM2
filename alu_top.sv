@@ -27,7 +27,7 @@ module top ();
     alu_if intf(clk,rst);
 
     
-    alu_rtl_design dut (
+    ALU_DESIGN dut (
            .OPA(intf.OPA),
            .OPB(intf.OPB),
            .CIN(intf.cin),

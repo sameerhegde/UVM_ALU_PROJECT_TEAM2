@@ -1,0 +1,59 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/rakshanayak/UVM_ALU_PROJECT_TEAM2
+Yalu_if
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+!s110 1722667127
+!i10b 1
+!s100 >o3DazIBoaS:Vz=]o9>Si1
+I6]k5FV:n1_]>>`5Q<[0O@2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+!s105 alu_interface_sv_unit
+S1
+R0
+w1722667091
+8alu_interface.sv
+Falu_interface.sv
+L0 14
+Z3 OE;L;10.6c;65
+r1
+!s85 0
+31
+!s108 1722667127.000000
+!s107 alu_define.svh|alu_interface.sv|
+!s90 alu_interface.sv|
+!i113 0
+Z4 o-L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Z5 tCvgOpt 0
+YALU_interface
+R1
+!s110 1722489869
+!i10b 1
+!s100 >W_>_hTGHRKd@C=7c8c093
+I>i<0kZd^i594K^WQbehTT0
+R2
+!s105 alu_if_sv_unit
+S1
+R0
+w1722489866
+8alu_if.sv
+Falu_if.sv
+L0 13
+R3
+r1
+!s85 0
+31
+!s108 1722489869.000000
+!s107 alu_define.svh|alu_if.sv|
+!s90 alu_if.sv|
+!i113 0
+R4
+R5
+n@a@l@u_interface

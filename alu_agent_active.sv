@@ -21,9 +21,11 @@ class alu_agent_active extends uvm_agent;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    s0 = alu_seqr::type_id::create("s0", this);
-    d0 = alu_driver::type_id::create("d0", this);
-    m0 = alu_monitor_write::type_id::create("m0", this);
+    if(get_is_active()== UVM_ACTIVE) begin
+      s0 = alu_seqr::type_id::create("s0", this);
+      d0 = alu_driver::type_id::create("d0", this);
+      m0 = alu_monitor_write::type_id::create("m0", this);
+    end
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);

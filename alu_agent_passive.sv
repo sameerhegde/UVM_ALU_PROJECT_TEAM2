@@ -20,7 +20,7 @@ class alu_agent_passive extends uvm_agent;
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if(get_is_active() == UVM_PASSIVE) begin
-      m0=alu_monitor_read::type_id::create("m1",this);
+      m1=alu_monitor_read::type_id::create("m1",this);
     end 
   endfunction
 

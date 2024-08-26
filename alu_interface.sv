@@ -33,8 +33,10 @@ interface alu_if (input bit clk, input bit rst);
     default input #0 output #0;
     input res, oflow, cout, g, l, e, err;
   endclocking
-  
+
+
   /*clocking ref_cb @ (posedge clk or posedge rst);
+>>>>>>> 9f80f30368c6b463e5cebbcad78a04e4932e4737
     default input #0 output #0;
     input rst;
   endclocking*/

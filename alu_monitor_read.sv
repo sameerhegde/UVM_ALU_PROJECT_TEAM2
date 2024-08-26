@@ -40,13 +40,15 @@ class alu_mon extends uvm_monitor;
       @(posedge vif.MON.clk);
       //wait(MON_IF.ce);
       if(MON_IF.ce) begin
-        alu_seq_item_1.co = MON_IF.rd_en;
-        alu_seq_item_1.wr_en = 0;
-        @(posedge vif.MON.clk);
-        @(posedge vif.MON.clk);
-        alu_seq_item_1.rdata = MON_IF.rdata;
+        alu_seq_item_1.cout = MON_IF.cout;
+        alu_seq_item_1.oflow=MON_IF.oflow;
+        alu_seq_item_1.res=MON_IF.res;
+        alu_seq_item_1.err=MON_IF.err;
+        alu_seq_item_1.g=MON_IF.g;
+        alu_seq_item_1.l=MON_IF.l;
+        alu_seq_item_1.e=MON_IF.e;
       end
-      item_collected_portiiiiiiik.write(alu_sequence_item_1);
+    //  item_collected_port.write(alu_seq_item_1);
     end 
   endtask
 

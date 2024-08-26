@@ -32,5 +32,5 @@ class alu_env extends uvm_environment;
     //
   endfunction
 
-endclass
+endclass: alu_env
 

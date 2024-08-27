@@ -1,0 +1,62 @@
+--> interface :
+class name- alu_if
+handle - intrf
+virtual interface- vif
+
+-->sequence item:
+class name- alu_seq_item
+handle - item
+
+
+-->sequence:
+class name- alu_seq
+handle -seq
+
+
+
+-->sequencer:
+class name- alu_seqr
+handle - seqr
+
+
+-->driver:
+class name- alu_drv
+handle-drv
+
+
+-->monitor-1:
+class name- alu_mon_wr
+handle - mon_wr
+
+
+-->monitor-2:
+class name- alu_mon_rd
+handle - mon_rd
+
+-->agent(active):
+class name- alu_agt_active
+handle - agt_active
+
+-->agent(passive):
+class name- alu_agt_passive
+handle -agt_passive
+
+
+-->scoreboard:
+class name- alu_scb
+handle - scb
+
+
+-->environment:
+class name- alu_env
+handle - env
+
+-->test:
+class name -alu_test
+handle - test
+
+
+-->top:
+module name-alu_top
+
+

@@ -7,11 +7,11 @@
 //------------------------------------------------------------------------------
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //-----------------------------------------------------------------------------
-`define MON_IF vif.MON.mon_cb
+`define MON_IF vif.mon_mp
  
 class alu_monitor_write extends uvm_monitor;
  
-  virtual alu_if vif;
+  virtual alu_if.mon_mp vif;
  
   uvm_analysis_port #(alu_seq_item) item_collected_port;
  
@@ -34,15 +34,15 @@ class alu_monitor_write extends uvm_monitor;
 
   virtual task run_phase(uvm_phase phase);
     forever begin
-      @(posedge vif.MONITOR.clk);;
-      if(MON_IF.ce) begin
-        //alu_seq_item_1.ce = MON_IF.ce;
-        alu_seq_item_1.mode = MON_IF.mode;
-        alu_seq_item_1.opa=MON_IF.opa;
-        alu_seq_item_1.opb=MON_IF.opb;
-        alu_seq_item_1.cin = MON_IF.cin;
-        alu_seq_item_1.cmd = MON_IF.cmd;
-        alu_seq_item_1.inp_valid =  MON_IF.inp_valid;
+      @(posedge vif.MON.clk);;
+      if(`MON_IF.ce) begin
+        //alu_seq_item_1.ce = `MON_IF.ce;
+        alu_seq_item_1.mode = `MON_IF.mode;
+        alu_seq_item_1.opa=`MON_IF.opa;
+        alu_seq_item_1.opb=`MON_IF.opb;
+        alu_seq_item_1.cin = `MON_IF.cin;
+        alu_seq_item_1.cmd = `MON_IF.cmd;
+        alu_seq_item_1.inp_valid =  `MON_IF.inp_valid;
    
       end
   end 

@@ -25,6 +25,8 @@ class alu_seq_item extends uvm_sequence_item;
   bit [`DATA_WIDTH: 0] res;
   bit oflow, cout, g, l, e, err;
 
+  rand int unsigned delay;
+
   `uvm_object_utils_begin (alu_seq_item)
     `uvm_field_int (ce,        UVM_DEFAULT)
     `uvm_field_int (cin,       UVM_DEFAULT)
@@ -33,6 +35,9 @@ class alu_seq_item extends uvm_sequence_item;
     `uvm_field_int (opb,       UVM_DEFAULT)
     `uvm_field_int (mode,      UVM_DEFAULT)
     `uvm_field_int (inp_valid, UVM_DEFAULT)
+
+    `uvm_field_int (delay, UVM_DEFAULT)
+
   `uvm_object_utils_end
 
   function new (string name = "alu_seq_item");
@@ -51,6 +56,12 @@ class alu_seq_item extends uvm_sequence_item;
   constraint c3_cmd 
   { 
     cmd dist {[0: 13]:=1};                
+  }
+  constraint c4_delay
+  { 
+     solve delay before opa;
+     solve delay before opb;
+     delay inside {[0: 16]};                
   }
 
 endclass: alu_seq_item

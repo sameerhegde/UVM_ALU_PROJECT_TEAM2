@@ -58,10 +58,29 @@ class alu_drv extends uvm_driver #(alu_seq_item);
       vif.ce = txn.ce;
       vif.cin = txn.cin;
       vif.cmd = txn.cmd;
-      vif.opa = txn.opa;
-      vif.opb = txn.opb;
       vif.mode = txn.mode;
       vif.inp_valid = txn.inp_valid;
+      if (txn.inp_valid == 2'b00) begin
+        vif.opa = 'bz;
+        vif.opb = 'bz;
+        repeat (txn.dealy) @(posedge vif.clk);
+      end
+      else if (txn.inp_valid == 2'b01) begin
+        vif.opa = 'bz;
+        vif.opb = txn.opb;
+        repeat (txn.dealy) @(posedge vif.clk);
+        vif.opa = txn.opa;
+      end
+      else if (txn.inp_valid == 2'b10) begin
+        vif.opa = txn.opa;
+        vif.opb = 'bz;
+        repeat (txn.dealy) @(posedge vif.clk);
+        vif.opb = txn.opb;
+      end
+      else begin
+        vif.opa = txn.opa;
+        vif.opb = txn.opb
+      end
       @(posedge vif.clk)
     end
   endtask: driver

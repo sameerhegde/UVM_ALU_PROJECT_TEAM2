@@ -22,7 +22,6 @@ class alu_monitor_write extends uvm_monitor;
   function new (string name="alu_monitor_write", uvm_component parent);
     super.new(name, parent);
     alu_seq_item_1 = new();
-    item_collected_port = new("item_collected_port", this);
   endfunction
  
   function void build_phase(uvm_phase phase);
@@ -43,7 +42,7 @@ class alu_monitor_write extends uvm_monitor;
         alu_seq_item_1.cin = `MON_IF.cin;
         alu_seq_item_1.cmd = `MON_IF.cmd;
         alu_seq_item_1.inp_valid =  `MON_IF.inp_valid;
-   
+       item_collect_port.write(alu_seq_item_1);
       end
   end 
   endtask

@@ -11,9 +11,9 @@
  
 class alu_monitor_write extends uvm_monitor;
  
-  virtual alu_if.mon_mp vif;
+  virtual alu_if vif;
  
-  uvm_analysis_port #(alu_seq_item) item_collected_port;
+ uvm_analysis_port #(alu_seq_item) item_collected_port;
  
   alu_seq_item alu_seq_item_1;
  

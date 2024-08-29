@@ -17,7 +17,7 @@ class alu_agent_active extends uvm_agent;
 
   alu_driver drv;
   alu_monitor_write mon_wr;
-  alu_sequencer sqr;
+  alu_seqr sqr;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);

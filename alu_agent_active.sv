@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_agent_active.sv
-// Developers   : 
+// Developers   : Nisha
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -17,12 +17,12 @@ class alu_agent_active extends uvm_agent;
 
   alu_driver d0;
   alu_monitor_write m0;
-  alu_seqr s0;
+  alu_sequencer s0;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if(get_is_active()== UVM_ACTIVE) begin
-      s0 = alu_seqr::type_id::create("s0", this);
+      s0 = alu_sequencer::type_id::create("s0", this);
       d0 = alu_driver::type_id::create("d0", this);
       m0 = alu_monitor_write::type_id::create("m0", this);
     end

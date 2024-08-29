@@ -15,22 +15,22 @@ class alu_agent_active extends uvm_agent;
     super.new(name,parent);
   endfunction
 
-  alu_driver d0;
-  alu_monitor_write m0;
-  alu_sequencer s0;
+  alu_driver drv;
+  alu_monitor_write mon_wr;
+  alu_sequencer sqr;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if(get_is_active()== UVM_ACTIVE) begin
-      s0 = alu_sequencer::type_id::create("s0", this);
-      d0 = alu_driver::type_id::create("d0", this);
-      m0 = alu_monitor_write::type_id::create("m0", this);
+     sqr = alu_sequencer::type_id::create("sqr", this);
+     drv = alu_driver::type_id::create("drv", this);
+     mon_wr = alu_monitor_write::type_id::create("mon_wr", this);
     end
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    d0.seq_item_port.connect(s0.seq_item_export);
+   drv.seq_item_port.connect(sqr.seq_item_export);
   endfunction
 
 endclass

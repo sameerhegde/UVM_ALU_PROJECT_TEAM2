@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_agent_active.sv
-// Developers   : 
+// Developers   : Nisha
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -23,22 +23,22 @@ class alu_agent_active extends uvm_agent;
     super.new(name,parent);
   endfunction
 
-  alu_driver dr;
-  alu_monitor_write mon_w;
-  alu_seqr sq;
+  alu_driver drv;
+  alu_monitor_write mon_wr;
+  alu_seqr sqr;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if(get_is_active()== UVM_ACTIVE) begin
-      sq = alu_seqr::type_id::create("sq", this);
-      dr = alu_driver::type_id::create("dr", this);
-      mon_w = alu_monitor_write::type_id::create("mon_w", this);
+     sqr = alu_sequencer::type_id::create("sqr", this);
+     drv = alu_driver::type_id::create("drv", this);
+     mon_wr = alu_monitor_write::type_id::create("mon_wr", this);
     end
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    dr.seq_item_port.connect(sq.seq_item_export);
-  endfunction
+   drv.seq_item_port.connect(sqr.seq_item_export);
+ endfunction
 
 endclass

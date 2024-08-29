@@ -28,8 +28,8 @@ module top ();
 
     
     ALU_DESIGN dut (
-           .OPA(intf.OPA),
-           .OPB(intf.OPB),
+        .OPA(intf.opa),
+        .OPB(intf.opb),
            .CIN(intf.cin),
            .CLK(clk), 
            .RST(intf.rst),

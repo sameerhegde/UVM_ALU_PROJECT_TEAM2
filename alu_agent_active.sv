@@ -8,29 +8,37 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+`include "macros.svh"
+ import uvm_pkg::*;
+
+`include "alu_driver.sv"
+`include "alu_monitor.sv"
+`include "alu_sequencer.sv"
+
+
 class alu_agent_active extends uvm_agent;
  
- 'uvm_component_utils(alu_agent_active)
+ `uvm_component_utils(alu_agent_active)
   function new(string name="alu_agent_active",uvm_component parent=null);
     super.new(name,parent);
   endfunction
 
-  alu_driver d0;
-  alu_monitor_write m0;
-  alu_seqr s0;
+  alu_driver dr;
+  alu_monitor_write mon_w;
+  alu_seqr sq;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if(get_is_active()== UVM_ACTIVE) begin
-      s0 = alu_seqr::type_id::create("s0", this);
-      d0 = alu_driver::type_id::create("d0", this);
-      m0 = alu_monitor_write::type_id::create("m0", this);
+      sq = alu_seqr::type_id::create("sq", this);
+      dr = alu_driver::type_id::create("dr", this);
+      mon_w = alu_monitor_write::type_id::create("mon_w", this);
     end
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    d0.seq_item_port.connect(s0.seq_item_export);
+    dr.seq_item_port.connect(sq.seq_item_export);
   endfunction
 
 endclass

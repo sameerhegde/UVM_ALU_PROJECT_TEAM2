@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_scoreboard.sv
-// Developers   : 
+// Developers   : Vinod (5289)
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -26,10 +26,10 @@ class alu_scb extends uvm_scoreboard;
   uvm_analysis_imp_mon_rd #(alu_seq_item, alu_scb) ap_mon_rd;
 
   // FIFOs
-  // uvm_tlm_fifo #(alu_seq_item) wr_txn_fifo
-  // uvm_tlm_fifo #(alu_seq_item) rd_txn_fifo
-  alu_seq_item wr_txn_queue[$];
-  alu_seq_item rd_txn_queue[$];
+  uvm_tlm_fifo #(alu_seq_item) wr_txn_fifo
+  uvm_tlm_fifo #(alu_seq_item) rd_txn_fifo
+  //alu_seq_item wr_txn_queue[$];
+  //alu_seq_item rd_txn_queue[$];
 
   // Virtual interface handle
   virtual alu_if vif;
@@ -42,6 +42,8 @@ class alu_scb extends uvm_scoreboard;
     super.build_phase (phase);
     ap_mon_wr = new ("ap_mon_wr", this);
     ap_mon_rd = new ("ap_mon_rd", this);
+    wr_txn_fifo = new ("wr_txn_fifo", this);
+    rd_txn_fifo = new ("rd_txn_fifo", this);
   endfunction: build_phase
  
   // Do something with the monitor_write txn
@@ -58,17 +60,93 @@ class alu_scb extends uvm_scoreboard;
     else if (txn.ce == 1) begin
       if (txn.mode == 1) begin
         // arithmetic checkers...
+        case (txn.cmd)
+          0: begin
+            if (txn.inp_valid == 2'b11)
+              txn.res = txn.opa + txn.opb;
+            else
+              txn.res = 'bz;
+          end
+          1: begin
+            if (txn.inp_valid == 2'b11)
+              txn.res = txn.opa - txn.opb;
+            else
+              txn.res = 'bz;
+          end
+          2: begin
+            if (txn.inp_valid == 2'b11)
+              txn.res = txn.opa + txn.opb + txn.cin;
+            else
+              txn.res = 'bz;
+          end
+          3: begin
+            if (txn.inp_valid == 2'b11)
+              txn.res = txn.opa - txn.opb - txn.cin;
+            else
+              txn.res = 'bz;
+          end
+          4: begin
+            if (txn.inp_valid == 2'b01)
+              txn.res = txn.opa + 1'b1;
+            else
+              txn.res = 'bz;
+          end
+          5: begin
+            if (txn.inp_valid == 2'b01)
+              txn.res = txn.opa - 1'b1;
+            else
+              txn.res = 'bz;
+          end
+          6: begin
+            if (txn.inp_valid == 2'b10)
+              txn.res = txn.opb + 1'b1;
+            else
+              txn.res = 'bz;
+          end
+          7: begin
+            if (txn.inp_valid == 2'b10)
+              txn.res = txn.opb - 1'b1;
+            else
+              txn.res = 'bz;
+          end
+          8: begin
+            if (txn.inp_valid == 2'b11) begin
+              if (txn.opa > txn.opb)  begin
+                G = 'b1; L = 'b0; E = 'b0;
+              end
+              else if (txn.opa < txn.opb) begin
+                G = 'b0; L = 'b1; E = 'b0;
+              end
+              else begin
+                G = 'b0; L = 'b0; E = 'b1;
+              end
+            end
+          end
+          9: begin
+             if (txn.inp_valid == 2'b11)
+               txn.res = (txn.opa + 1'b1) * (txn.opb + 1'b1);
+             else
+               txn.res = 'bz;
+          end
+          10: begin
+            if (txn.inp_valid == 2'b11)
+              txn.res = (txn.opa << 1) * txn.opb;
+            else
+              txn.res = 'bz;
+          end
+          default: txn.res = 'bz;
+        endcase        
       end
       else begin
         // logical checkers...
       end
     end
-    wr_txn_queue.try_put (txn);
+    wr_txn_fifo.try_put (txn);
   endfunction: write_mon_wr
   
   // Do something with the monitor_read txn
   virtual function void write_mon_rd (alu_seq_item txn);
-    rd_txn_queue.try_put (txn);
+    rd_txn_fifo.try_put (txn);
   endfunction: write_mon_rd
 
   // Run phase

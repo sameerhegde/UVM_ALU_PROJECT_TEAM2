@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_agent_passive.sv
-// Developers   : Nisha
+// Developers   : Team -2 
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -11,10 +11,10 @@
 class alu_agent_passive extends uvm_agent;
  
  'uvm_component_utils(alu_agent_passive)
+ 
   function new(string name="alu_agent_passive",uvm_component parent=null);
     super.new(name,parent);
   endfunction
-
 
   alu_monitor_read mon_rd;
 

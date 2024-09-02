@@ -33,6 +33,7 @@ class alu_drv extends uvm_driver #(alu_seq_item);
 
   virtual task run_phase ();
     repeat (`NUM_TRANSACTIONS) begin
+      @(posedge vif.clk);
       seq_item_port.get_next_item (txn);
       driver ();
       seq_item_port.item_done ();
@@ -41,16 +42,22 @@ class alu_drv extends uvm_driver #(alu_seq_item);
 
   // drive task...
   task driver ();
-    @(posedge vif.clk);
     if (vif.rst) begin
-      vif.ce = 'bz;
-      vif.cin = 'bz;
-      vif.cmd = 'bz;
-      vif.opa = 'bz;
-      vif.opb = 'bz;
-      vif.mode = 'bz;
+      vif.ce <= 'bz;
+      vif.cin <= 'bz;
+      vif.cmd <= 'bz;
+      vif.opa <= 'bz;
+      vif.opb <= 'bz;
+      vif.mode <= 'bz;
       vif.inp_valid = 'bz;
-      @(posedge vif.clk)
     end
-    if ()
+    else begin
+      vif.ce <= txn.ce; 
+      vif.cin <= txn.cin;
+      vif.cmd <= txn.cmd;     
+      vif.opa <= txn.opa;
+      vif.opb <= txn.opb;
+      vif.mode <= txn.mode;
+      vif.inp_valid <= txn.inp_valid;
+    end
 endclass: alu_drv

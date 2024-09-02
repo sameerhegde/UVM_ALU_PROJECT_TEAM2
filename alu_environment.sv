@@ -41,13 +41,10 @@ class alu_env extends uvm_env;
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    act_agent.mon_w.item_collected_port.connect(sbh.item_collected_export);
-    act_agent.mon_w.item_collected_port.connect(cov.item_collected_export);
-    pass_agent.mon_r.item_collected_port.connect(sbh.item_collected_export);
-    pass_agent.mon_r.item_collected_port.connect(cov.item_collected_export);
-    
-    
-    
+    act_agent.mon_wr.item_collected_port.connect(sbh.ap_mon_wr);
+    act_agent.mon_wr.item_collected_port.connect(cov.mon_wr_imp);
+    pass_agent.mon_rd.item_collected_port.connect(sbh.ap_mon_rd);
+    pass_agent.mon_rd.item_collected_port.connect(cov.mon_rd_imp); 
   endfunction
 
 endclass: alu_env

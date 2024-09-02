@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_sequence_item.sv
-// Developers   : Raksha Nayak
+// Developers   : Team -2
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -19,12 +19,18 @@ class alu_seq_item extends uvm_sequence_item;
   rand bit cin;
   rand bit mode;
   rand bit [1: 0] inp_valid;
-  rand bit [`CMD_WIDTH - 1:  0] cmd;
-  rand bit [`DATA_WIDTH - 1: 0] opa;
-  rand bit [`DATA_WIDTH - 1: 0] opb;
+  rand bit [`CMD_WIDTH - 1:0] cmd;
+  rand bit [`DATA_WIDTH - 1:0] opa;
+  rand bit [`DATA_WIDTH - 1:0] opb;
+  
   // Output ports
   bit [`DATA_WIDTH: 0] res;
-  bit oflow, cout, g, l, e, err;
+  bit oflow;
+  bit cout;
+  bit g;
+  bit l;
+  bit e;
+  err;
 
   // Rand clocks between input valid
   rand int unsigned delay;
@@ -34,13 +40,13 @@ class alu_seq_item extends uvm_sequence_item;
   int txn_id;
 
   `uvm_object_utils_begin (alu_seq_item)
-    `uvm_field_int (ce,        UVM_DEFAULT)
-    `uvm_field_int (cin,       UVM_DEFAULT)
-    `uvm_field_int (cmd,       UVM_DEFAULT)
-    `uvm_field_int (opa,       UVM_DEFAULT)
-    `uvm_field_int (opb,       UVM_DEFAULT)
-    `uvm_field_int (mode,      UVM_DEFAULT)
-    `uvm_field_int (inp_valid, UVM_DEFAULT)
+  `uvm_field_int (ce, UVM_DEFAULT)
+  `uvm_field_int (cin, UVM_DEFAULT)
+  `uvm_field_int (cmd, UVM_DEFAULT)
+  `uvm_field_int (opa, UVM_DEFAULT)
+  `uvm_field_int (opb, UVM_DEFAULT)
+  `uvm_field_int (mode, UVM_DEFAULT)
+  `uvm_field_int (inp_valid, UVM_DEFAULT)
 
     `uvm_field_int (delay, UVM_DEFAULT)
     `uvm_field_int (txn_id, UVM_DEFAULT | UVM_NOCOMPARE)

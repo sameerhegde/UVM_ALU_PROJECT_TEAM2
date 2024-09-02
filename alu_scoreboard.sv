@@ -138,7 +138,51 @@ class alu_scb extends uvm_scoreboard;
         endcase        
       end
       else begin
-        // logical checkers...
+        case(txn.cmd)
+           0: AND
+             begin
+               if(txn.inp_valid == 2'b11)
+                  txn.res = txn.opa && txn.opb;
+               else
+                  txn.res = 'bz;
+             end
+           1: NAND
+             begin
+                if(txn.inp_valid == 2'b11)
+                  txn.res = !(txn.opa && txn.opb);
+               else
+                  txn.res = 'bz;
+             end
+           2: OR
+             begin
+                if(txn.inp_valid == 2'b11)
+                  txn.res = txn.opa || txn.opb;
+               else
+                  txn.res = 'bz;
+             end
+           3: NOR
+             begin
+                if(txn.inp_valid == 2'b11)
+                  txn.res = !(txn.opa || txn.opb);
+               else
+                  txn.res = 'bz;
+             end
+           4: XOR
+             begin
+                if(txn.inp_valid == 2'b11)
+                  txn.res = txn.opa ^ txn.opb;
+               else
+                  txn.res = 'bz;
+             end
+           5: XNOR
+             begin
+                if(txn.inp_valid == 2'b11)
+                  txn.res = !(txn.opa ^ txn.opb);
+               else
+                  txn.res = 'bz;
+             end
+
+
       end
     end
     wr_txn_fifo.try_put (txn);

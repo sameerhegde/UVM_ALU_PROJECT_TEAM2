@@ -46,6 +46,9 @@ handle -agt_passive
 class name- alu_scb
 handle - scb
 
+-->coverage
+class name-alu_cov
+
 
 -->environment:
 class name- alu_env

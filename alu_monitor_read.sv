@@ -8,6 +8,10 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+/* import uvm_pkg::*;
+`include "uvm_macros.svh"
+`include "alu_sequence_item.sv"*/
+
 `define MON_IF vif.MON.mon_cb
 
 class alu_monitor_read extends uvm_monitor;

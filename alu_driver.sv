@@ -8,9 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-import uvm_pkg::*;
-`include "uvm_macros.svh"
-`include "alu_define.svh"
 `include "alu_sequence_item.sv"
 
 class alu_drv extends uvm_driver #(alu_seq_item);
@@ -21,7 +18,7 @@ class alu_drv extends uvm_driver #(alu_seq_item);
     super.new (name, parent);
   endfunction: new
 
-  virtual alu_if.drv_mp vif;  
+  virtual alu_if vif;  
   
   function void build_phase (uvm_phase phase);
     super.build_phase (phase);

@@ -17,7 +17,6 @@
 `include "alu_scoreboard.sv"
 `inlcude "alu_coverage.sv"
 
-
 class alu_env extends uvm_env;
 
   `uvm_component_utils(alu_env)
@@ -26,25 +25,25 @@ class alu_env extends uvm_env;
     super.new(name, parent);
   endfunction
 
-  alu_agt_active act_agent;
-  alu_agt_passive pass_agent;
-  alu_scb sbh;
-  alu_cov cov;
+  alu_agent_active act_h;
+  alu_agent_passive pass_h;
+  alu_scb scb_h;
+  alu_cov cov_h;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    act_agent = alu_agt_active::type_id::create("act_agent", this);
-    pass_agent = alu_agt_passive::type_id::create("pass_agent", this);
-    sbh = alu_scb::type_id::create("sbh", this);
-    cov =alu_cov::type_id::create("cov",this);
+   act_h = alu_agent_active::type_id::create("act_h", this);
+   pass_h = alu_agent_passive::type_id::create("pass_h", this);
+   scb_h = alu_scb::type_id::create("scb_h", this);
+   cov_h =alu_cov::type_id::create("cov_h",this);
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-    act_agent.mon_wr.item_collected_port.connect(sbh.ap_mon_wr);
-    act_agent.mon_wr.item_collected_port.connect(cov.mon_wr_imp);
-    pass_agent.mon_rd.item_collected_port.connect(sbh.ap_mon_rd);
-    pass_agent.mon_rd.item_collected_port.connect(cov.mon_rd_imp); 
+   act_h.mon_wr.item_collected_port.connect(scb_h.ap_mon_wr);
+   act_h.mon_wr.item_collected_port.connect(cov_h.mon_wr_imp);
+   pass_h.mon_rd.item_collected_port.connect(scb_h.ap_mon_rd);
+   pass_h.mon_rd.item_collected_port.connect(cov_h.mon_rd_imp); 
   endfunction
 
 endclass: alu_env

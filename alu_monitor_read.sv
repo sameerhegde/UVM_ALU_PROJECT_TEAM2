@@ -12,15 +12,14 @@
 
 class alu_monitor_read extends uvm_monitor;
 
+ `uvm_component_utils(alu_monitor_read)
+
   virtual alu_if vif;
+  alu_seq_item read_h;
 
   uvm_analysis_port #(alu_seq_item) item_collected_port;
 
-  alu_seq_item read_h;
-
-  `uvm_component_utils(alu_mon)
-
-  function new (string name="alu_mon", uvm_component parent);
+  function new (string name="alu_monitor_read", uvm_component parent);
     super.new(name, parent);
     item_collected_port = new("item_collected_port", this);
   endfunction
@@ -35,7 +34,7 @@ class alu_monitor_read extends uvm_monitor;
   virtual task run_phase(uvm_phase phase);
     forever 
        begin
-         @(posedge vif.MON.clk)
+         @(posedge vif.clk)
            begin
              read_h.cout = MON_IF.cout;
              read_h.oflow=MON_IF.oflow;

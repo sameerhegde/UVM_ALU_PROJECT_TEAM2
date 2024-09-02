@@ -18,19 +18,19 @@ class alu_seq_item extends uvm_sequence_item;
   rand bit ce;
   rand bit cin;
   rand bit mode;
-  rand bit [1: 0] inp_valid;
+  rand bit [1:0] inp_valid;
   rand bit [`CMD_WIDTH - 1:0] cmd;
   rand bit [`DATA_WIDTH - 1:0] opa;
   rand bit [`DATA_WIDTH - 1:0] opb;
   
   // Output ports
-  bit [`DATA_WIDTH: 0] res;
+  bit [`DATA_WIDTH:0] res;
   bit oflow;
   bit cout;
   bit g;
   bit l;
   bit e;
-  err;
+  bit err;
 
   // Rand clocks between input valid
   rand int unsigned delay;
@@ -48,8 +48,8 @@ class alu_seq_item extends uvm_sequence_item;
   `uvm_field_int (mode, UVM_DEFAULT)
   `uvm_field_int (inp_valid, UVM_DEFAULT)
 
-    `uvm_field_int (delay, UVM_DEFAULT)
-    `uvm_field_int (txn_id, UVM_DEFAULT | UVM_NOCOMPARE)
+  `uvm_field_int (delay, UVM_DEFAULT)
+  `uvm_field_int (txn_id, UVM_DEFAULT | UVM_NOCOMPARE)
 
   `uvm_object_utils_end
 

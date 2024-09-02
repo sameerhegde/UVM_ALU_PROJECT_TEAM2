@@ -7,17 +7,18 @@
 //------------------------------------------------------------------------------
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //-----------------------------------------------------------------------------
+
+`include "alu_driver.sv"
+
 `define MON_IF vif.mon_mp
  
 class alu_monitor_write extends uvm_monitor;
- 
-  virtual alu_if vif;
- 
- uvm_analysis_port #(alu_seq_item) item_collected_port;
- 
-  alu_seq_item write_h;
- 
   `uvm_component_utils(alu_monitor_write)
+
+   virtual alu_if vif;
+   alu_seq_item write_h;
+
+   uvm_analysis_port #(alu_seq_item) item_collected_port;
  
   function new (string name="alu_monitor_write", uvm_component parent);
     super.new(name, parent);
@@ -35,18 +36,19 @@ class alu_monitor_write extends uvm_monitor;
   virtual task run_phase(uvm_phase phase);
     forever 
        begin
-         @(posedge vif.MON.clk);
-           write_h.ce = `MON_IF.ce;
-           write_h.mode = `MON_IF.mode;
-           write_h.opa=`MON_IF.opa;
-           write_h.opb=`MON_IF.opb;
-           write_h.cin = `MON_IF.cin;
-           write_h.cmd = `MON_IF.cmd;
-           write_h.inp_valid =  `MON_IF.inp_valid;
+         @(posedge vif.MON.clk)
+           begin
+              write_h.ce = `MON_IF.ce;
+              write_h.mode = `MON_IF.mode;
+              write_h.opa=`MON_IF.opa;
+              write_h.opb=`MON_IF.opb;
+              write_h.cin = `MON_IF.cin;
+              write_h.cmd = `MON_IF.cmd;
+              write_h.inp_valid =  `MON_IF.inp_valid;
         
-           item_collect_port.write(write_h);
-       end
-  end 
+              item_collect_port.write(write_h);
+           end
+        end 
   endtask
  
 endclass

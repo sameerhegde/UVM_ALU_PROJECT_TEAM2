@@ -8,6 +8,11 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+/* import uvm_pkg::*;
+  `include "uvm_macros.svh"
+  `include "alu_define.svh"
+  `include "alu_sequence_item.sv"*/
+
 `uvm_analysis_imp_decl(mon_wr)
 `uvm_analysis_imp_decl(mon_rd)
 
@@ -37,7 +42,7 @@ class alu_cov extends uvm_subscriber #(uvm_seq_item);
             } 
 
             coverpoint seq_item_wr.cmd{
-                        bins cmd[]={[`CMD_WIDTH'd0:`CMD_WIDTH'd((2**CMD_WIDTH)-1];}
+                        bins cmd[]={[`CMD_WIDTH'd0:`CMD_WIDTH'd((2**`CMD_WIDTH)-1];}
                 }
             coverpoint seq_item_wr.ce{
                         bins ce_0={0};
@@ -47,14 +52,13 @@ class alu_cov extends uvm_subscriber #(uvm_seq_item);
                         bins opa_bin[]={[`DATA_WIDTH'd0:`DATA_WIDTH'd((2**`DATA_WIDTH)-1)];}
                 }
             coverpoint seq_item_wr.opb{
-                        bins opa_bin[]={[`DATA_WIDTH'd0:`DATA_WIDTH'd((2**DATA_WIDTH)-1)];}
+                        bins opa_bin[]={[`DATA_WIDTH'd0:`DATA_WIDTH'd((2**`DATA_WIDTH)-1)];}
                 }
             coverpoint seq_item_wr.cin{
                         bins cin_0={0};
                         bins cin_1={1};
                 }
         endgroup:fun_cov_wr
-
 
 
              }
@@ -126,7 +130,5 @@ class alu_cov extends uvm_subscriber #(uvm_seq_item);
           `uvm_info("COVERAGE",$sformatf("Input coverage is %f \n output coverage is %f",wr_cov_value,rd_cov_value),UVM_LOW);
         endfunction
     
-
-
 
 endclass

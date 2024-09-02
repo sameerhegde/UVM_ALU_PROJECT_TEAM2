@@ -33,18 +33,20 @@ class alu_monitor_read extends uvm_monitor;
   endfunction
 
   virtual task run_phase(uvm_phase phase);
-    forever begin
-      @(posedge vif.MON.clk);
-      if(MON_IF.ce) begin
-        read_h.cout = MON_IF.cout;
-        read_h.oflow=MON_IF.oflow;
-        read_h.res=MON_IF.res;
-        read_h.err=MON_IF.err;
-        read_h.g=MON_IF.g;
-        read_h.l=MON_IF.l;
-        read_h.e=MON_IF.e;
-      end
-   item_collected_port.write(read_h);
+    forever 
+       begin
+         @(posedge vif.MON.clk)
+           begin
+             read_h.cout = MON_IF.cout;
+             read_h.oflow=MON_IF.oflow;
+             read_h.res=MON_IF.res;
+             read_h.err=MON_IF.err;
+             read_h.g=MON_IF.g;
+             read_h.l=MON_IF.l;
+             read_h.e=MON_IF.e;
+             
+             item_collected_port.write(read_h);
+          end
     end 
   endtask
 

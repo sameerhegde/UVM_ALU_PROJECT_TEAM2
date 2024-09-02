@@ -8,12 +8,13 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-/* import uvm_pkg::*;
+import uvm_pkg::*;
 `include "uvm_macros.svh"
-`include "alu_define.svh"*/
+`include "alu_define.svh"
 
 class alu_seq_item extends uvm_sequence_item;
 
+  // Input ports
   rand bit ce;
   rand bit cin;
   rand bit mode;
@@ -21,11 +22,16 @@ class alu_seq_item extends uvm_sequence_item;
   rand bit [`CMD_WIDTH - 1:  0] cmd;
   rand bit [`DATA_WIDTH - 1: 0] opa;
   rand bit [`DATA_WIDTH - 1: 0] opb;
-
+  // Output ports
   bit [`DATA_WIDTH: 0] res;
   bit oflow, cout, g, l, e, err;
 
+  // Rand clocks between input valid
   rand int unsigned delay;
+
+  // Debug fields
+  static int count;
+  int txn_id;
 
   `uvm_object_utils_begin (alu_seq_item)
     `uvm_field_int (ce,        UVM_DEFAULT)
@@ -37,11 +43,13 @@ class alu_seq_item extends uvm_sequence_item;
     `uvm_field_int (inp_valid, UVM_DEFAULT)
 
     `uvm_field_int (delay, UVM_DEFAULT)
+    `uvm_field_int (txn_id, UVM_DEFAULT | UVM_NOCOMPARE)
 
   `uvm_object_utils_end
 
   function new (string name = "alu_seq_item");
     super.new(name);
+    txn_id = count++;
   endfunction
 
   constraint c1_mode

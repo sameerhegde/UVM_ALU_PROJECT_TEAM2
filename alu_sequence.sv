@@ -8,7 +8,7 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-//`include "alu_sequence_item.sv"
+`include "alu_sequence_item.sv"
 
 class alu_seq extends uvm_sequence #(alu_seq_item);
 

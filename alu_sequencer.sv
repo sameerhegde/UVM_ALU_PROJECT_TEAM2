@@ -1,17 +1,14 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_sequencer.sv
-// Developers   : Nisha Shetty
+// Developers   : Team-2
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
- import uvm_pkg::*;
-`include "macros.svh"
 `include "alu_sequence_item.sv"
-`include "alu_define.svh"
 
 class alu_seqr extends uvm_sequencer #(alu_seq_item);
 

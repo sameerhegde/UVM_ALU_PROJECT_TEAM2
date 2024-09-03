@@ -10,7 +10,7 @@
 
 `include "alu_driver.sv"
 
-`define MON_IF vif.mon_mp
+`define WR_IF vif.mon_mp
  
 class alu_monitor_write extends uvm_monitor;
   `uvm_component_utils(alu_monitor_write)
@@ -38,13 +38,13 @@ class alu_monitor_write extends uvm_monitor;
        begin
          @(posedge vif.MON.clk)
            begin
-              write_h.ce = `MON_IF.ce;
-              write_h.mode = `MON_IF.mode;
-              write_h.opa=`MON_IF.opa;
-              write_h.opb=`MON_IF.opb;
-              write_h.cin = `MON_IF.cin;
-              write_h.cmd = `MON_IF.cmd;
-              write_h.inp_valid =  `MON_IF.inp_valid;
+              write_h.ce =`WR_IF.ce;
+              write_h.mode =`WR_IF.mode;
+              write_h.opa=`WR_IF.opa;
+              write_h.opb=`WR_IF.opb;
+              write_h.cin =`WR_IF.cin;
+              write_h.cmd =`WR_IF.cmd;
+              write_h.inp_valid =`WR_IF.inp_valid;
         
               item_collect_port.write(write_h);
            end

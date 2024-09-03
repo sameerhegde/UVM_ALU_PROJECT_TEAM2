@@ -149,7 +149,7 @@ class alu_scb extends uvm_scoreboard;
            1: NAND
              begin
                 if(txn.inp_valid == 2'b11)
-                  txn.res = !(txn.opa && txn.opb);
+                  txn.res = ~(txn.opa && txn.opb);
                else
                   txn.res = 'bz;
              end
@@ -163,7 +163,7 @@ class alu_scb extends uvm_scoreboard;
            3: NOR
              begin
                 if(txn.inp_valid == 2'b11)
-                  txn.res = !(txn.opa || txn.opb);
+                  txn.res = ~(txn.opa || txn.opb);
                else
                   txn.res = 'bz;
              end
@@ -177,11 +177,52 @@ class alu_scb extends uvm_scoreboard;
            5: XNOR
              begin
                 if(txn.inp_valid == 2'b11)
-                  txn.res = !(txn.opa ^ txn.opb);
+                  txn.res = ~(txn.opa ^ txn.opb);
                else
                   txn.res = 'bz;
              end
-
+           6:
+             begin
+                if(txn.inp_valid == 2'b01)
+                  txn.res = ~ txn.opa;
+               else
+                  txn.res = 'bz;
+             end
+            7:
+             begin
+                if(txn.inp_valid == 2'b10)
+                  txn.res = ~ txn.opb;
+               else
+                  txn.res = 'bz;
+             end
+             8:
+             begin
+                if(txn.inp_valid == 2'b01)
+                  txn.res =  txn.opa >> 1;
+               else
+                  txn.res = 'bz;
+             end
+              9:
+             begin
+                if(txn.inp_valid == 2'b01)
+                  txn.res =  txn.opa << 1;
+               else
+                  txn.res = 'bz;
+             end
+              10:
+             begin
+                if(txn.inp_valid == 2'b10)
+                  txn.res =  txn.opb >> 1;
+               else
+                  txn.res = 'bz;
+             end
+              11:
+             begin
+                if(txn.inp_valid == 2'b10)
+                  txn.res =  txn.opb << 1;
+               else
+                  txn.res = 'bz;
+             end       
 
       end
     end

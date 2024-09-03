@@ -10,7 +10,7 @@
 
 `include "alu_sequence_item.sv"
 
-`define MON_IF vif.MON.mon_cb
+`define RD_IF vif.MON.mon_cb
 
 class alu_monitor_read extends uvm_monitor;
 
@@ -38,13 +38,13 @@ class alu_monitor_read extends uvm_monitor;
        begin
          @(posedge vif.clk)
            begin
-             read_h.cout = MON_IF.cout;
-             read_h.oflow=MON_IF.oflow;
-             read_h.res=MON_IF.res;
-             read_h.err=MON_IF.err;
-             read_h.g=MON_IF.g;
-             read_h.l=MON_IF.l;
-             read_h.e=MON_IF.e;
+             read_h.cout = RD_IF.cout;
+             read_h.oflow = RD_IF.oflow;
+             read_h.res = RD_IF.res;
+             read_h.err = RD_IF.err;
+             read_h.g = RD_IF.g;
+             read_h.l = RD_IF.l;
+             read_h.e = RD_IF.e;
              
              item_collected_port.write(read_h);
           end

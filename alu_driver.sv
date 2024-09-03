@@ -8,7 +8,7 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_sequence_item.sv"
+`include "alu_sequencer.sv"
 
 class alu_drv extends uvm_driver #(alu_seq_item);
 

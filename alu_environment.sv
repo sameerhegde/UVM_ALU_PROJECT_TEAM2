@@ -9,13 +9,10 @@
 //------------------------------------------------------------------------------
 
 
-/*`include "uvm_macros.svh"
- import uvm_pkg::*;
-
 `include "alu_agent_active.sv"
 `include "alu_agent_passive.sv"
 `include "alu_scoreboard.sv"
-`inlcude "alu_coverage.sv"*/
+`inlcude "alu_coverage.sv"
 
 class alu_env extends uvm_env;
 

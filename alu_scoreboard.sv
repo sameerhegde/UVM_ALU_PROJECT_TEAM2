@@ -112,13 +112,13 @@ class alu_scb extends uvm_scoreboard;
           8: begin
             if (txn.inp_valid == 2'b11) begin
               if (txn.opa > txn.opb)  begin
-                G = 'b1; L = 'b0; E = 'b0;
+                txn.g = 'b1; txn.l = 'b0; txn.e = 'b0;
               end
               else if (txn.opa < txn.opb) begin
-                G = 'b0; L = 'b1; E = 'b0;
+                txn.g = 'b0; txn.l = 'b1; txn.e = 'b0;
               end
               else begin
-                G = 'b0; L = 'b0; E = 'b1;
+                txn.g = 'b0; txn.l = 'b0; txn.e = 'b1;
               end
             end
           end

@@ -8,9 +8,11 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+`include "alu_monitor_read.sv"
+
 class alu_agent_passive extends uvm_agent;
  
- 'uvm_component_utils(alu_agent_passive)
+ `uvm_component_utils(alu_agent_passive)
  
   function new(string name="alu_agent_passive",uvm_component parent=null);
     super.new(name,parent);

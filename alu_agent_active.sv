@@ -8,31 +8,28 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "macros.svh"
- import uvm_pkg::*;
-
-`include "alu_driver.sv"
-`include "alu_monitor.sv"
-`include "alu_sequencer.sv"
+`include "alu_monitor_write.sv"
 
 
 class alu_agent_active extends uvm_agent;
  
  `uvm_component_utils(alu_agent_active)
+
   function new(string name="alu_agent_active",uvm_component parent=null);
     super.new(name,parent);
   endfunction
 
-  alu_driver drv;
+  alu_drv drv;
   alu_monitor_write mon_wr;
   alu_seqr sqr;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     mon_wr = alu_monitor_write::type_id::create("mon_wr", this);
+
     if(get_is_active()== UVM_ACTIVE) begin
-     sqr = alu_sequencer::type_id::create("sqr", this);
-     drv = alu_driver::type_id::create("drv", this);  
+     sqr = alu_seqr::type_id::create("sqr", this);
+     drv = alu_drv::type_id::create("drv", this);  
     end
   endfunction
 

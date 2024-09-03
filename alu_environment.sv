@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_environment.sv
-// Developers   : Raksha Nayak 
+// Developers   : Team-2 
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -37,10 +37,10 @@ class alu_env extends uvm_env;
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
-   act_h.mon_wr.item_collected_port.connect(scb_h.ap_mon_wr);
-   act_h.mon_wr.item_collected_port.connect(cov_h.mon_wr_imp);
-   pass_h.mon_rd.item_collected_port.connect(scb_h.ap_mon_rd);
-   pass_h.mon_rd.item_collected_port.connect(cov_h.mon_rd_imp); 
+   act_h.mon_ip.item_collected_port.connect(scb_h.ap_mon_ip);
+   act_h.mon_ip.item_collected_port.connect(cov_h.mon_ip_imp);
+   pass_h.mon_op.item_collected_port.connect(scb_h.ap_mon_op);
+   pass_h.mon_op.item_collected_port.connect(cov_h.mon_op_imp); 
   endfunction
 
 endclass: alu_env

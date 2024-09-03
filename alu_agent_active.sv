@@ -8,7 +8,7 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_monitor_write.sv"
+`include "alu_ip_monitor.sv"
 
 
 class alu_agent_active extends uvm_agent;
@@ -20,12 +20,12 @@ class alu_agent_active extends uvm_agent;
   endfunction
 
   alu_drv drv;
-  alu_monitor_write mon_wr;
+  alu_ip_monitor mon_ip;
   alu_seqr sqr;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    mon_wr = alu_monitor_write::type_id::create("mon_wr", this);
+    mon_ip = alu_ip_monitor::type_id::create("mon_ip", this);
 
     if(get_is_active()== UVM_ACTIVE) begin
      sqr = alu_seqr::type_id::create("sqr", this);

@@ -8,21 +8,20 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-/* import uvm_pkg::*;
-  `include "uvm_macros.svh"
-  `include "alu_define.svh"
-  `include "alu_sequence_item.sv"*/
+`include "alu_define.svh"
 
-`uvm_analysis_imp_decl(mon_wr)
-`uvm_analysis_imp_decl(mon_rd)
+`include "alu_sequence_item.sv"
+
+`uvm_analysis_imp_decl(_mon_wr)
+`uvm_analysis_imp_decl(_mon_rd)
 
 
-class alu_cov extends uvm_subscriber #(uvm_seq_item);
+class alu_cov extends uvm_subscriber #(alu_seq_item);
 
    `uvm_component_utils(alu_cov)
 
-        uvm_analysis_imp_mon_wr#(alu_seq_item,alu_cov)mon_wr_imp;
-        uvm_analysis_imp_mon_rd#(alu_seq_item,alu_cov)mon_rd_imp;
+        uvm_analysis_imp_mon_wr #(alu_seq_item,alu_cov)mon_wr_imp;
+        uvm_analysis_imp_mon_rd #(alu_seq_item,alu_cov)mon_rd_imp;
 
         alu_seq_item seq_item_wr;
         alu_seq_item seq_item_rd;
@@ -42,27 +41,23 @@ class alu_cov extends uvm_subscriber #(uvm_seq_item);
             } 
 
             coverpoint seq_item_wr.cmd{
-                        bins cmd[]={[`CMD_WIDTH'd0:`CMD_WIDTH'd((2**`CMD_WIDTH)-1];}
+                        bins cmd[]={[0:$]};
                 }
             coverpoint seq_item_wr.ce{
                         bins ce_0={0};
                         bins ce_1={1};
                 }
             coverpoint seq_item_wr.opa{
-                        bins opa_bin[]={[`DATA_WIDTH'd0:`DATA_WIDTH'd((2**`DATA_WIDTH)-1)];}
+                        bins opa_bin = {[0:$]};
                 }
             coverpoint seq_item_wr.opb{
-                        bins opa_bin[]={[`DATA_WIDTH'd0:`DATA_WIDTH'd((2**`DATA_WIDTH)-1)];}
+                        bins opb_bin = {[0:$]};
                 }
             coverpoint seq_item_wr.cin{
                         bins cin_0={0};
                         bins cin_1={1};
                 }
         endgroup:fun_cov_wr
-
-
-             }
-
 
         covergroup fun_cov_rd;
              coverpoint seq_item_rd.err{
@@ -90,7 +85,7 @@ class alu_cov extends uvm_subscriber #(uvm_seq_item);
                   bins cout_1 = {1};
              }
              coverpoint seq_item_rd.res{
-                  bins result[]  = {[`DATA_WIDTH'd0:`DATA_WIDTH'd((2**`DATA_WIDTH)-1)]};
+                  bins result = {[0:$]};
               }
         endgroup:fun_cov_rd
 
@@ -101,32 +96,26 @@ class alu_cov extends uvm_subscriber #(uvm_seq_item);
         
         function new(string name="alu_cov",uvm_component parent=null);
                 super.new(name,parent);
-                wr_cov=new();
-                rd_cov=new();
                 mon_wr_imp=new();
                 mon_rd_imp=new();
         endfunction:new
 
           
 
-        function write_mon_wr(alu_seq_item seq_item_wr);
-                this.seq_item_wr=seq_item_wr;
+        virtual function void write(alu_seq_item t);
+                this.seq_item_wr= t;
                 fun_cov_wr.sample();
-        endfunction
- 
- 
-        function write_mon_rd(alu_seq_item seq_item_rd);
-                this.seq_item_rd=seq_item_rd;
+                this.seq_item_rd= t;
                 fun_cov_rd.sample();
         endfunction
 
 
 
          
-       function void extract_phase(uvm_phase phase);
+      virtual  function void extract_phase(uvm_phase phase);
           super.extract_phase(phase);
-          wr_cov_value=wr_cov.get_coverage();
-          rd_cov_value=rd_cov.get_coverage();
+          wr_cov_value = fun_cov_wr.get_coverage();
+          rd_cov_value = fun_cov_rd.get_coverage();
           `uvm_info("COVERAGE",$sformatf("Input coverage is %f \n output coverage is %f",wr_cov_value,rd_cov_value),UVM_LOW);
         endfunction
     

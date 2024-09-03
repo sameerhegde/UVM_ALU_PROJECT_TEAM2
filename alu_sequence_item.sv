@@ -10,7 +10,7 @@
 
  import uvm_pkg::*;
 `include "uvm_macros.svh"
-`include "alu_define.svh"
+//`include "alu_define.svh"
 
 class alu_seq_item extends uvm_sequence_item;
 

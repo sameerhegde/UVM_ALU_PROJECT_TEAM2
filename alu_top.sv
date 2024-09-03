@@ -8,11 +8,9 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-
-
-`include "package.svh"
-`include "alu_rtl_design.v"
-`include "alu_if.sv"
+`include "alu_design.v"
+`include "alu_interface.sv"
+`include "alu_package.sv"
 
 module top ();
     bit clk,rst;
@@ -20,8 +18,8 @@ module top ();
     always #5 clk = ~clk;
     
     initial begin
-      reset = 1;
-      #5 reset =0;
+      rst = 1;
+      #5 rst =0;
      end
 
     alu_if intf(clk,rst);

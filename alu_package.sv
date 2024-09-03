@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_package.sv
-// Developers   : Vinod (5289) 
+// Developers   : Team - 2 
 // Created Date : 03/09/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -12,8 +12,8 @@
 `include "alu_sequence.sv"
 `include "alu_sequencer.sv"
 `include "alu_driver.sv"
-`include "alu_monitor_write.sv"
-`include "alu_monitor_read.sv"
+`include "alu_ip_write.sv"
+`include "alu_op_monitor.sv"
 `include "alu_agent_active.sv"
 `include "alu_agent_passive.sv"
 `include "alu_scoreboard.sv"

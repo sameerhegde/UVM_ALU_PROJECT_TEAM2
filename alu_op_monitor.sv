@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
-// File Name    : alu_monitor_read.sv
+// File Name    : alu_op_monitor.sv
 // Developers   : Team-2
 // Created Date : 01/08/2024
 // Version      : V1.0
@@ -21,7 +21,7 @@ class alu_op_monitor extends uvm_monitor;
 
   uvm_analysis_port #(alu_seq_item) item_collected_port;
 
-  function new (string name="alu_monitor_read", uvm_component parent);
+  function new (string name="alu_op_monitor", uvm_component parent);
     super.new(name, parent);
     item_collected_port = new("item_collected_port", this);
   endfunction

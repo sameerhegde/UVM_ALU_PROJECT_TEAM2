@@ -8,8 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_op_monitor.sv"
-
 class alu_agent_passive extends uvm_agent;
  
  `uvm_component_utils(alu_agent_passive)
@@ -22,11 +20,10 @@ class alu_agent_passive extends uvm_agent;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if(get_is_active() == UVM_PASSIVE) begin
+    //if(get_is_active() == UVM_PASSIVE) begin
      mon_op=alu_op_monitor::type_id::create("mon_op",this);
-   end 
+  // end 
   endfunction
 
 endclass
-
 

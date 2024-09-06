@@ -8,6 +8,8 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+
+
 `define OP_IF vif.MON.mon_cb
 
 class alu_op_monitor extends uvm_monitor;
@@ -34,9 +36,9 @@ class alu_op_monitor extends uvm_monitor;
   virtual task run_phase(uvm_phase phase);
     forever 
        begin
-         @(posedge vif.clk)
+         @(posedge vif.MON.clk);
            begin
-             op_mon_h.cout = `OP_IF.cout;
+             op_mon_h.cout =`OP_IF.cout;
              op_mon_h.oflow = `OP_IF.oflow;
              op_mon_h.res = `OP_IF.res;
              op_mon_h.err = `OP_IF.err;
@@ -46,6 +48,7 @@ class alu_op_monitor extends uvm_monitor;
              
              item_collected_port.write(op_mon_h);
           end
+         `uvm_info("OUTPUT MONITOR",$sformatf("res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",op_mon_h.res,op_mon_h.oflow,op_mon_h.cout,op_mon_h.g,op_mon_h.l,op_mon_h.e,op_mon_h.err),UVM_LOW)
     end 
   endtask
 

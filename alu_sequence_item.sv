@@ -8,10 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
- import uvm_pkg::*;
-`include "uvm_macros.svh"
-//`include "alu_define.svh"
-
 class alu_seq_item extends uvm_sequence_item;
 
   // Input ports

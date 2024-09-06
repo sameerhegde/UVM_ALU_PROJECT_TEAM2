@@ -12,7 +12,7 @@
 import uvm_pkg::*;
 
 `include "alu_design.v"
-`include "define.svh"
+`include "alu_define.svh"
 `include "alu_interface.sv"
 `include "alu_sequence_item.sv"
 `include "alu_sequence.sv"

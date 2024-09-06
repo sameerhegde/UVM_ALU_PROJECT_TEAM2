@@ -11,7 +11,7 @@
 `include "uvm_macros.svh"
 import uvm_pkg::*;
 
-`include "alu_design.sv"
+`include "alu_design.v"
 `include "define.svh"
 `include "alu_interface.sv"
 `include "alu_sequence_item.sv"

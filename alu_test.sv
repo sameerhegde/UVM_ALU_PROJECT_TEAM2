@@ -8,6 +8,8 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+
+
 class alu_test extends uvm_test;
 
   // Factory registration
@@ -49,9 +51,6 @@ class alu_add extends alu_test;
   // Factory registration
   `uvm_component_utils(alu_add)
  
-  // Environment class handle
-  alu_env env_add;
- 
   // Base sequence handle
   alu_add_sequence seq_add;
  
@@ -63,7 +62,7 @@ class alu_add extends alu_test;
   // Build phase
   virtual function void build_phase (uvm_phase phase);
     super.build_phase (phase);
-    env_add = alu_env::type_id::create("env_add", this);
+    seq_add = alu_add_sequence::type_id::create("seq_add");
   endfunction: build_phase
  
   // End of elaboration phase
@@ -75,7 +74,7 @@ class alu_add extends alu_test;
   // Run phase;
   task run_phase (uvm_phase phase);
     phase.raise_objection (this);
-    seq_add = alu_add_sequence::type_id::create("seq_add");
+    seq_add.start(env.act_h.sqr_h);
     phase.drop_objection (this);
   endtask: run_phase
  

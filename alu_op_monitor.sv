@@ -8,8 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_sequence_item.sv"
-
 `define OP_IF vif.MON.mon_cb
 
 class alu_op_monitor extends uvm_monitor;
@@ -38,13 +36,13 @@ class alu_op_monitor extends uvm_monitor;
        begin
          @(posedge vif.clk)
            begin
-             op_mon_h.cout = OP_IF.cout;
-             op_mon_h.oflow = OP_IF.oflow;
-             op_mon_h.res = OP_IF.res;
-             op_mon_h.err = OP_IF.err;
-             op_mon_h.g = OP_IF.g;
-             op_mon_h.l = OP_IF.l;
-             op_mon_h.e = OP_IF.e;
+             op_mon_h.cout = `OP_IF.cout;
+             op_mon_h.oflow = `OP_IF.oflow;
+             op_mon_h.res = `OP_IF.res;
+             op_mon_h.err = `OP_IF.err;
+             op_mon_h.g = `OP_IF.g;
+             op_mon_h.l = `OP_IF.l;
+             op_mon_h.e = `OP_IF.e;
              
              item_collected_port.write(op_mon_h);
           end

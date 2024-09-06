@@ -28,7 +28,9 @@ class alu_scb extends uvm_scoreboard;
 
   alu_seq_item ip_queue[$];
   alu_seq_item op_queue[$];
-
+  
+        alu_seq_item exp_trans;
+        alu_seq_item act_trans;
   // Count variable for compare status and total tests ran
   //int pass, fail, total;
 
@@ -52,22 +54,26 @@ class alu_scb extends uvm_scoreboard;
     
   task run_phase (uvm_phase phase);
     super.run_phase(phase);
-   
-    forever 
-      begin
-        alu_seq_item exp_trans,act_trans;
-        
+     forever begin   
         wait(ip_queue.size() > 0 && op_queue.size() > 0);
         exp_trans = ip_queue.pop_front();
         act_trans = op_queue.pop_front();
         
-        compare(exp_trans,act_trans);
+       $display(" [%0t] SCOREBOARD RUN PHASE mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",$time,exp_trans.mode,exp_trans.inp_valid,exp_trans.cmd,exp_trans.opa,exp_trans.opb,exp_trans.ce,exp_trans.cin);
         
-      end
-  
+       $display(" [%0t] SCOREBOARD RUN PHASE res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",$time,act_trans.res,act_trans.oflow,act_trans.cout,act_trans.g,act_trans.l,act_trans.e,act_trans.err);
+        
+        
+        compare(exp_trans,act_trans);
+     end
 endtask
 
 task compare(alu_seq_item exp_trans,alu_seq_item act_trans);
+  
+  $display(" [%0t] COMPARE mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",$time,exp_trans.mode,exp_trans.inp_valid,exp_trans.cmd,exp_trans.opa,exp_trans.opb,exp_trans.ce,exp_trans.cin);
+        
+  $display(" [%0t] COMPARE RUN PHASE res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",$time,act_trans.res,act_trans.oflow,act_trans.cout,act_trans.g,act_trans.l,act_trans.e,act_trans.err);
+
   
   if(exp_trans.ce ==1)
     begin
@@ -230,9 +236,9 @@ task compare(alu_seq_item exp_trans,alu_seq_item act_trans);
     end
   
   if(exp_trans.res == act_trans.res)
-    $display("COMPARE %s ", $sformatf("Transaction Passed! ACT=%d, EXP=%d", act_trans.res, exp_trans.res));
+    `uvm_info("COMPARE", $sformatf(" Transaction Passed! ACT=%d, EXP=%d", act_trans.res, exp_trans.res),UVM_LOW)
   else
-    $display("COMPARE", $sformatf("Transaction failed! ACT=%d, EXP=%d",  act_trans.res, exp_trans.res));
+    `uvm_error("COMPARE", $sformatf("Transaction failed! ACT=%d, EXP=%d",  act_trans.res, exp_trans.res));
     
   if(exp_trans.cout == act_trans.cout)
     `uvm_info("COMPARE", $sformatf("Transaction Passed! ACT=%d, EXP=%d", act_trans.cout, exp_trans.cout), UVM_LOW)
@@ -268,3 +274,5 @@ endtask
 
   
 endclass
+   
+  

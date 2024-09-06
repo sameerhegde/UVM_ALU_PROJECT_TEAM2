@@ -8,15 +8,20 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_sequence_item.v"
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+`include "alu_design.sv"
+`include "define.svh"
+`include "alu_interface.sv"
+`include "alu_sequence_item.sv"
 `include "alu_sequence.sv"
 `include "alu_sequencer.sv"
 `include "alu_driver.sv"
-`include "alu_ip_write.sv"
+`include "alu_ip_monitor.sv"
 `include "alu_op_monitor.sv"
 `include "alu_agent_active.sv"
 `include "alu_agent_passive.sv"
 `include "alu_scoreboard.sv"
-`include "alu_coverage.sv"
 `include "alu_environment.sv"
 `include "alu_test.sv"

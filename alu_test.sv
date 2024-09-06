@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Project      : ALU 
 // File Name    : alu_test.sv
-// Developers   : Vinod (5289)
+// Developers   : Team-2
 // Created Date : 01/08/2024
 // Version      : V1.0
 //------------------------------------------------------------------------------
@@ -31,9 +31,9 @@ class alu_test extends uvm_test;
   endfunction: build_phase
 
   // End of elaboration phase
-  virtual function end_of_elaboration (uvm_phase phase);
+  virtual function void end_of_elaboration ();
     // Print topology
-    print ():
+    print ();
   endfunction: end_of_elaboration
 
   // Run phase;
@@ -45,87 +45,38 @@ class alu_test extends uvm_test;
 
 endclass: alu_test
 
-//------------------------------------------------------------------------------
-// Class         : arithmetic_ops_test
-// Description   : Test only arithmetic functionality
-//------------------------------------------------------------------------------
-
-class arithmetic_ops_test extends alu_test;
-  
+class alu_add extends alu_test;
   // Factory registration
-  `uvm_component_utils (arithmetic_ops_test)
-
+  `uvm_component_utils(alu_add)
+ 
   // Environment class handle
-  alu_env env_a;
-
+  alu_env env_add;
+ 
   // Base sequence handle
-  arithemtic_ops_seq seq;
-
+  alu_add_sequence seq_add;
+ 
   // New function
-  function new (string name = "arithemtic_ops_test", uvm_component parent);
+  function new (string name = "alu_add", uvm_component parent);
     super.new (name, parent);
   endfunction: new
-
+ 
   // Build phase
   virtual function void build_phase (uvm_phase phase);
     super.build_phase (phase);
-    env_a = alu_env::type_id::create("env_a", this);
+    env_add = alu_env::type_id::create("env_add", this);
   endfunction: build_phase
-
+ 
   // End of elaboration phase
-  virtual function end_of_elaboration (uvm_phase phase);
+  virtual function void end_of_elaboration ();
     // Print topology
-    print ():
+    print ();
   endfunction: end_of_elaboration
-
+ 
   // Run phase;
   task run_phase (uvm_phase phase);
     phase.raise_objection (this);
-    seq = arithmetic_ops_seq::type_id::create("seq");
+    seq_add = alu_add_sequence::type_id::create("seq_add");
     phase.drop_objection (this);
   endtask: run_phase
-
-endclass: arithmetic_ops_test
-
-//------------------------------------------------------------------------------
-// Class         : logical_ops_test
-// Description   : Test only arithmetic functionality
-//------------------------------------------------------------------------------
-
-class logical_ops_test extends alu_test;
-  
-  // Factory registration
-  `uvm_component_utils (logical_ops_test)
-
-  // Environment class handle
-  alu_env env_l;
-
-  // Base sequence handle
-  arithemtic_ops_seq seq;
-
-  // New function
-  function new (string name = "logical_ops_test", uvm_component parent);
-    super.new (name, parent);
-  endfunction: new
-
-  // Build phase
-  virtual function void build_phase (uvm_phase phase);
-    super.build_phase (phase);
-    env_l = alu_env::type_id::create("env_l", this);
-  endfunction: build_phase
-
-  // End of elaboration phase
-  virtual function end_of_elaboration (uvm_phase phase);
-    // Print topology
-    print ():
-  endfunction: end_of_elaboration
-
-  // Run phase;
-  task run_phase (uvm_phase phase);
-    phase.raise_objection (this);
-    seq = arithmetic_ops_seq::type_id::create("seq");
-    phase.drop_objection (this);
-  endtask: run_phase
-
-endclass: logical_ops_test
-
+ 
+endclass: alu_add

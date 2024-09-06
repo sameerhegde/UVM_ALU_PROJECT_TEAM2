@@ -8,6 +8,8 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
+
+
 class alu_seq extends uvm_sequence #(alu_seq_item);
 
   // Factory registration
@@ -23,10 +25,13 @@ class alu_seq extends uvm_sequence #(alu_seq_item);
 
   virtual task body;
     repeat (`NUM_TRANSACTIONS) begin
+      `uvm_info("SEQUENCE","start",UVM_LOW)
       txn = alu_seq_item::type_id::create("txn");
       wait_for_grant ();
-      mainSeq: assert (txn.randomize)
-      else $error ("%m Randomization failed!");
+      assert (txn.randomize())
+        $info("assertion passed");
+      else 
+        $error ("%m Randomization failed!");
       send_request (txn);
       wait_for_item_done ();
     end
@@ -47,15 +52,16 @@ class alu_add_sequence extends alu_seq;
   endfunction
 
   virtual task body();
-  //repeat (10) begin
+  repeat (10) begin
     `uvm_do_with(txn, {
       txn.mode == 1'b1;
       txn.cmd ==4'b0000;txn.inp_valid == 2'b11; txn.ce == 1;
     })
     `uvm_info(get_type_name(),"hello",UVM_LOW)
-   //end
+   end
   endtask
 endclass
+
 
 // class alu_sub_sequence extends alu_seq;
 

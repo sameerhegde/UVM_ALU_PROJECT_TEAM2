@@ -8,50 +8,46 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //-----------------------------------------------------------------------------
 
+`define IP_IF vif.MON.mon_cb
+ 
+class alu_ip_monitor extends uvm_monitor;
+  `uvm_component_utils(alu_ip_monitor)
 
+   virtual alu_if vif;
+   alu_seq_item ip_mon_h;
 
-
-
-`define OP_IF vif.MON.mon_cb
-
-class alu_op_monitor extends uvm_monitor;
-
- `uvm_component_utils(alu_op_monitor)
-
-  virtual alu_if vif;
-  alu_seq_item op_mon_h;
-
-  uvm_analysis_port #(alu_seq_item) item_collected_port;
-
-  function new (string name="alu_op_monitor", uvm_component parent);
+   uvm_analysis_port #(alu_seq_item) item_collected_port;
+ 
+  function new (string name="alu_ip_monitor", uvm_component parent);
     super.new(name, parent);
     item_collected_port = new("item_collected_port", this);
   endfunction
-
+ 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    op_mon_h = alu_seq_item::type_id::create("op_mon_h");
+   ip_mon_h = alu_seq_item::type_id::create("ip_mon_h");
     if(!uvm_config_db#(virtual alu_if)::get(this, "", "vif", vif))
        `uvm_fatal("NOVIF",{"virtual interface must be set for: ",get_full_name(),".vif"});
   endfunction
+ 
 
   virtual task run_phase(uvm_phase phase);
     forever 
        begin
          @(posedge vif.MON.clk);
-           begin
-             op_mon_h.cout =`OP_IF.cout;
-             op_mon_h.oflow = `OP_IF.oflow;
-             op_mon_h.res = `OP_IF.res;
-             op_mon_h.err = `OP_IF.err;
-             op_mon_h.g = `OP_IF.g;
-             op_mon_h.l = `OP_IF.l;
-             op_mon_h.e = `OP_IF.e;
-             
-             item_collected_port.write(op_mon_h);
-          end
-         `uvm_info("OUTPUT MONITOR",$sformatf(" res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",op_mon_h.res,op_mon_h.oflow,op_mon_h.cout,op_mon_h.g,op_mon_h.l,op_mon_h.e,op_mon_h.err),UVM_LOW)
-    end 
+         begin
+              ip_mon_h.ce =`IP_IF.ce;
+              ip_mon_h.mode =`IP_IF.mode;
+              ip_mon_h.opa=`IP_IF.opa;
+              ip_mon_h.opb=`IP_IF.opb;
+              ip_mon_h.cin =`IP_IF.cin;
+              ip_mon_h.cmd =`IP_IF.cmd;
+              ip_mon_h.inp_valid =`IP_IF.inp_valid;
+              item_collected_port.write(ip_mon_h);
+         end
+         `uvm_info("IP MON",$sformatf(" mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",ip_mon_h.mode,ip_mon_h.inp_valid,ip_mon_h.cmd,ip_mon_h.opa,ip_mon_h.opb,ip_mon_h.ce,ip_mon_h.cin),UVM_LOW)
+        end 
   endtask
-
+ 
 endclass
+

@@ -27,36 +27,43 @@ class alu_drv extends uvm_driver #(alu_seq_item);
   alu_seq_item txn;
 
   virtual task run_phase(uvm_phase phase);
-    repeat (`NUM_TRANSACTIONS)
+    forever
         begin
-          @(posedge vif.clk)
+          `uvm_info("DRIVER","driver start",UVM_LOW)
+          @(posedge vif.DRV.clk)
+         begin
           seq_item_port.get_next_item (txn);
-          drive();
+          drive();   
           seq_item_port.item_done ();
-        end
+         end
+    end
+    
   endtask: run_phase
 
-  // drive task...
-  task drive();
-    if (vif.rst)
+ // drive task...
+  
+ virtual task drive();
+    if (vif.DRV.drv_cb.rst)
       begin
-        vif.ce <= 'bz;
-        vif.cin <= 'bz;
-        vif.cmd <= 'bz;
-        vif.opa <= 'bz;
-        vif.opb <= 'bz;
-        vif.mode <= 'bz;
-        vif.inp_valid = 'bz;
+        vif.DRV.drv_cb.ce <= 'bz;
+        vif.DRV.drv_cb.cin <= 'bz;
+        vif.DRV.drv_cb.cmd <= 'bz;
+        vif.DRV.drv_cb.opa <= 'bz;
+        vif.DRV.drv_cb.opb <= 'bz;
+        vif.DRV.drv_cb.mode <= 'bz;
+        vif.DRV.drv_cb.inp_valid <= 'bz;
       end
     else
       begin
-       vif.ce <= txn.ce; 
-       vif.cin <= txn.cin;
-       vif.cmd <= txn.cmd;     
-       vif.opa <= txn.opa;
-       vif.opb <= txn.opb;
-       vif.mode <= txn.mode;
-       vif.inp_valid <= txn.inp_valid;
+       vif.DRV.drv_cb.ce <= txn.ce; 
+       vif.DRV.drv_cb.cin <= txn.cin;
+       vif.DRV.drv_cb.cmd <= txn.cmd;     
+       vif.DRV.drv_cb.opa <= txn.opa;
+       vif.DRV.drv_cb.opb <= txn.opb;
+       vif.DRV.drv_cb.mode <= txn.mode;
+       vif.DRV.drv_cb.inp_valid <= txn.inp_valid;
      end
+   `uvm_info("DRIVER",$sformatf("mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",vif.DRV.drv_cb.mode,vif.DRV.drv_cb.inp_valid,vif.DRV.drv_cb.cmd,vif.DRV.drv_cb.opa,vif.DRV.drv_cb.opb,vif.DRV.drv_cb.ce,vif.DRV.drv_cb.cin),UVM_LOW)
   endtask
+  
 endclass: alu_drv

@@ -8,14 +8,12 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_sequence_item.sv"
-
 class alu_seqr extends uvm_sequencer #(alu_seq_item);
 
-  `uvm_object_utils (alu_seqr)
+  `uvm_component_utils (alu_seqr)
 
-  function new (string name = "alu_seqr");
-    super.new(name);
+  function new (string name = "alu_seqr",uvm_component parent);
+    super.new(name,parent);
   endfunction
   
 endclass: alu_seqr

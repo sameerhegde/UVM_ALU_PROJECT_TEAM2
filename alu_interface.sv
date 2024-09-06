@@ -8,8 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`include "alu_define.svh"
-
 interface alu_if (input bit clk, input bit rst);
   
   logic ce;
@@ -49,6 +47,13 @@ interface alu_if (input bit clk, input bit rst);
     input l; 
     input e; 
     input err;
+    input ce;
+    input opa;
+    input opb;  
+    input mode; 
+    input cin; 
+    input inp_valid; 
+    input cmd;
   endclocking
   
   modport DRV (clocking drv_cb);

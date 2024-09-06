@@ -8,8 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //-----------------------------------------------------------------------------
 
-`include "alu_driver.sv"
-
 `define IP_IF vif.MON.mon_cb
  
 class alu_ip_monitor extends uvm_monitor;
@@ -28,7 +26,7 @@ class alu_ip_monitor extends uvm_monitor;
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
    ip_mon_h = alu_seq_item::type_id::create("ip_mon_h");
-    if(!uvm_config_db#(virtual alu_interface)::get(this, "", "vif", vif))
+    if(!uvm_config_db#(virtual alu_if)::get(this, "", "vif", vif))
        `uvm_fatal("NOVIF",{"virtual interface must be set for: ",get_full_name(),".vif"});
   endfunction
  
@@ -36,7 +34,7 @@ class alu_ip_monitor extends uvm_monitor;
   virtual task run_phase(uvm_phase phase);
     forever 
        begin
-         @(posedge vif.MON.clk)
+         @(posedge vif.clk)
            begin
               ip_mon_h.ce =`IP_IF.ce;
               ip_mon_h.mode =`IP_IF.mode;
@@ -45,11 +43,11 @@ class alu_ip_monitor extends uvm_monitor;
               ip_mon_h.cin =`IP_IF.cin;
               ip_mon_h.cmd =`IP_IF.cmd;
               ip_mon_h.inp_valid =`IP_IF.inp_valid;
-        
-              item_collect_port.write(ip_mon_h);
+              item_collected_port.write(ip_mon_h);
            end
         end 
   endtask
  
 endclass
+
 

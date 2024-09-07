@@ -7,7 +7,6 @@
 //------------------------------------------------------------------------------
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
-
 `uvm_analysis_imp_decl (_ip_mon)
 `uvm_analysis_imp_decl (_op_mon)
 
@@ -29,10 +28,8 @@ class alu_scb extends uvm_scoreboard;
   alu_seq_item ip_queue[$];
   alu_seq_item op_queue[$];
   
-        alu_seq_item exp_trans;
-        alu_seq_item act_trans;
-  // Count variable for compare status and total tests ran
-  //int pass, fail, total;
+  alu_seq_item exp_trans;
+  alu_seq_item act_trans;
 
   // Build phase
   function void build_phase (uvm_phase phase);
@@ -43,7 +40,6 @@ class alu_scb extends uvm_scoreboard;
       `uvm_fatal ("No vif", {"Set virtual interface to: ", get_full_name (), ".vif"});
   endfunction: build_phase
  
-  // Do something with the monitor_write txn
   virtual function void write_ip_mon (alu_seq_item item);
     ip_queue.push_back(item);
   endfunction
@@ -53,18 +49,14 @@ class alu_scb extends uvm_scoreboard;
   endfunction
     
   task run_phase (uvm_phase phase);
-    super.run_phase(phase);
+   super.run_phase(phase);
      forever begin   
-        wait(ip_queue.size() > 0 && op_queue.size() > 0);
+        wait(ip_queue.size() > 0 && op_queue.size() > 0)
+       begin
         exp_trans = ip_queue.pop_front();
         act_trans = op_queue.pop_front();
-        
-       $display(" [%0t] SCOREBOARD RUN PHASE mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",$time,exp_trans.mode,exp_trans.inp_valid,exp_trans.cmd,exp_trans.opa,exp_trans.opb,exp_trans.ce,exp_trans.cin);
-        
-       $display(" [%0t] SCOREBOARD RUN PHASE res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",$time,act_trans.res,act_trans.oflow,act_trans.cout,act_trans.g,act_trans.l,act_trans.e,act_trans.err);
-        
-        
         compare(exp_trans,act_trans);
+       end
      end
 endtask
 
@@ -82,7 +74,11 @@ task compare(alu_seq_item exp_trans,alu_seq_item act_trans);
           case(exp_trans.cmd)
             0:begin
               if(exp_trans.inp_valid == 2'b11)
-                exp_trans.res = exp_trans.opa + exp_trans.opb;
+                begin
+                  exp_trans.res = exp_trans.opa + exp_trans.opb;
+                  exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                end
+              
               else
                 exp_trans.res = 'bz;
             end
@@ -235,6 +231,8 @@ task compare(alu_seq_item exp_trans,alu_seq_item act_trans);
         end
     end
   
+  
+  
   if(exp_trans.res == act_trans.res)
     `uvm_info("COMPARE", $sformatf(" Transaction Passed! ACT=%d, EXP=%d", act_trans.res, exp_trans.res),UVM_LOW)
   else
@@ -275,4 +273,3 @@ endtask
   
 endclass
    
-  

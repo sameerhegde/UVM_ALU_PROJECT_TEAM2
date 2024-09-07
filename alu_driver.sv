@@ -7,7 +7,6 @@
 //------------------------------------------------------------------------------
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
-
 class alu_drv extends uvm_driver #(alu_seq_item);
 
   `uvm_component_utils (alu_drv);
@@ -30,13 +29,11 @@ class alu_drv extends uvm_driver #(alu_seq_item);
     forever
         begin
           `uvm_info("DRIVER","driver start",UVM_LOW)
-          @(posedge vif.DRV.clk)
-         begin
+          repeat(2) @(posedge vif.DRV.drv_cb);
           seq_item_port.get_next_item (txn);
           drive();   
           seq_item_port.item_done ();
-         end
-    end
+        end
     
   endtask: run_phase
 
@@ -63,7 +60,7 @@ class alu_drv extends uvm_driver #(alu_seq_item);
        vif.DRV.drv_cb.mode <= txn.mode;
        vif.DRV.drv_cb.inp_valid <= txn.inp_valid;
      end
-   `uvm_info("DRIVER",$sformatf("mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",vif.DRV.drv_cb.mode,vif.DRV.drv_cb.inp_valid,vif.DRV.drv_cb.cmd,vif.DRV.drv_cb.opa,vif.DRV.drv_cb.opb,vif.DRV.drv_cb.ce,vif.DRV.drv_cb.cin),UVM_LOW)
+   `uvm_info("DRIVER",$sformatf(" [%0t] mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",$time,vif.DRV.drv_cb.mode,vif.DRV.drv_cb.inp_valid,vif.DRV.drv_cb.cmd,vif.DRV.drv_cb.opa,vif.DRV.drv_cb.opb,vif.DRV.drv_cb.ce,vif.DRV.drv_cb.cin),UVM_LOW)
   endtask
   
 endclass: alu_drv

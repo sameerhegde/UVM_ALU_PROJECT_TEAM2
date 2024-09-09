@@ -32,7 +32,7 @@ class alu_test extends uvm_test;
 
   // End of elaboration phase
   virtual function void end_of_elaboration ();
-  // Print topology
+    // Print topology
     print ();
   endfunction: end_of_elaboration
 
@@ -65,7 +65,9 @@ class alu_add extends alu_test;
  
   task run_phase (uvm_phase phase);
     phase.raise_objection (this);
+    repeat(10)begin
     seq_add.start(env.act_h.sqr_h);
+    end
     phase.drop_objection (this);
   endtask: run_phase
  
@@ -171,6 +173,7 @@ class alu_inc_opa extends alu_test;
   task run_phase (uvm_phase phase);
     phase.raise_objection (this);
     inc_opa.start(env.act_h.sqr_h);
+    //#55;
     phase.drop_objection (this);
   endtask: run_phase
  
@@ -253,3 +256,107 @@ class alu_dec_opb extends alu_test;
   endtask: run_phase
  
 endclass: alu_dec_opb
+
+class alu_cmp extends alu_test;
+  `uvm_component_utils(alu_cmp)
+ 
+  alu_cmp_seq cmp_h;
+ 
+  function new (string name = "alu_cmp", uvm_component parent);
+    super.new (name, parent);
+  endfunction: new
+ 
+  virtual function void build_phase (uvm_phase phase);
+    super.build_phase (phase);
+    cmp_h = alu_cmp_seq::type_id::create("cmp_h");
+  endfunction: build_phase
+ 
+  virtual function void end_of_elaboration ();
+    print ();
+  endfunction: end_of_elaboration
+ 
+  task run_phase (uvm_phase phase);
+    phase.raise_objection (this);
+    cmp_h.start(env.act_h.sqr_h);
+    phase.drop_objection (this);
+  endtask: run_phase
+ 
+endclass: alu_cmp
+
+class alu_inc_mul extends alu_test;
+  `uvm_component_utils(alu_inc_mul)
+ 
+  alu_inc_mul_seq inc_mul_h;
+ 
+  function new (string name = "alu_inc_mul", uvm_component parent);
+    super.new (name, parent);
+  endfunction: new
+ 
+  virtual function void build_phase (uvm_phase phase);
+    super.build_phase (phase);
+    inc_mul_h = alu_inc_mul_seq::type_id::create("inc_mul_h");
+  endfunction: build_phase
+ 
+  virtual function void end_of_elaboration ();
+    print ();
+  endfunction: end_of_elaboration
+ 
+  task run_phase (uvm_phase phase);
+    phase.raise_objection (this);
+    inc_mul_h.start(env.act_h.sqr_h);
+    phase.drop_objection (this);
+  endtask: run_phase
+ 
+endclass: alu_inc_mul
+
+class alu_lshift_mul extends alu_test;
+  `uvm_component_utils(alu_lshift_mul)
+ 
+  alu_opa_lshift_mul_seq lshift_mul_h;
+ 
+  function new (string name = "alu_lshift_mul", uvm_component parent);
+    super.new (name, parent);
+  endfunction: new
+ 
+  virtual function void build_phase (uvm_phase phase);
+    super.build_phase (phase);
+    lshift_mul_h = alu_opa_lshift_mul_seq::type_id::create("lshift_mul_h");
+  endfunction: build_phase
+ 
+  virtual function void end_of_elaboration ();
+    print ();
+  endfunction: end_of_elaboration
+ 
+  task run_phase (uvm_phase phase);
+    phase.raise_objection (this);
+    lshift_mul_h.start(env.act_h.sqr_h);
+    phase.drop_objection (this);
+  endtask: run_phase
+ 
+endclass: alu_lshift_mul
+
+class alu_and extends alu_test;
+  `uvm_component_utils(alu_and)
+ 
+  alu_and_seq seq_and;
+ 
+  function new (string name = "alu_and", uvm_component parent);
+    super.new (name, parent);
+  endfunction: new
+ 
+  virtual function void build_phase (uvm_phase phase);
+    super.build_phase (phase);
+    seq_and = alu_and_seq::type_id::create("seq_and");
+  endfunction: build_phase
+ 
+  virtual function void end_of_elaboration ();
+    print ();
+  endfunction: end_of_elaboration
+ 
+  task run_phase (uvm_phase phase);
+    phase.raise_objection (this);
+    seq_and.start(env.act_h.sqr_h);
+    phase.drop_objection (this);
+  endtask: run_phase
+ 
+endclass: alu_and

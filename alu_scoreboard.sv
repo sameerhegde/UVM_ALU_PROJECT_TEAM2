@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
+
 `uvm_analysis_imp_decl (_ip_mon)
 `uvm_analysis_imp_decl (_op_mon)
 
@@ -316,4 +317,6 @@ endtask
           endcase
         end
     end
+  endtask
+endclass
    

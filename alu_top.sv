@@ -18,8 +18,8 @@ module top ();
     always #5 clk = ~clk;
     
     initial begin
-      rst = 1;
-      #5 rst =0;
+      rst = 0;
+      //#10 rst =0;
      end
 
     alu_if intf(clk,rst);
@@ -51,6 +51,6 @@ module top ();
      initial begin
 
        run_test("alu_add");
-
      end
+  
 endmodule

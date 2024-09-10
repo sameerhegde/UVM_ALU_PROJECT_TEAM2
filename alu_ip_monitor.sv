@@ -8,7 +8,6 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //-----------------------------------------------------------------------------
 
-
 `define IP_IF vif.MON.mon_cb
  
 class alu_ip_monitor extends uvm_monitor;
@@ -33,9 +32,10 @@ class alu_ip_monitor extends uvm_monitor;
  
 
   virtual task run_phase(uvm_phase phase);
+    repeat(1) @(posedge `IP_IF);
     forever 
        begin
-         repeat(2) @(posedge vif.MON.clk);
+         repeat(1) @(posedge vif.mon_cb);
               ip_mon_h.ce =`IP_IF.ce;
               ip_mon_h.mode =`IP_IF.mode;
               ip_mon_h.opa=`IP_IF.opa;
@@ -45,6 +45,7 @@ class alu_ip_monitor extends uvm_monitor;
               ip_mon_h.inp_valid =`IP_IF.inp_valid;
               item_collected_port.write(ip_mon_h);
          `uvm_info("IP MON",$sformatf("[%0t]  mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",$time,ip_mon_h.mode,ip_mon_h.inp_valid,ip_mon_h.cmd,ip_mon_h.opa,ip_mon_h.opb,ip_mon_h.ce,ip_mon_h.cin),UVM_LOW)
+         repeat(1) @(posedge `IP_IF);
         end 
   endtask
  

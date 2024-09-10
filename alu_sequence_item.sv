@@ -29,11 +29,7 @@ class alu_seq_item extends uvm_sequence_item;
   bit err;
 
   // Rand clocks between input valid
-  rand int unsigned delay;
-
-  // Debug fields
-  static int count;
-  int txn_id;
+  rand bit [4:0] delay;
 
   `uvm_object_utils_begin (alu_seq_item)
   `uvm_field_int (ce, UVM_DEFAULT)
@@ -43,15 +39,20 @@ class alu_seq_item extends uvm_sequence_item;
   `uvm_field_int (opb, UVM_DEFAULT)
   `uvm_field_int (mode, UVM_DEFAULT)
   `uvm_field_int (inp_valid, UVM_DEFAULT)
+  `uvm_field_int (res,UVM_ALL_ON)
+  `uvm_field_int (cout,UVM_ALL_ON)
+  `uvm_field_int (g,UVM_ALL_ON)
+  `uvm_field_int (l,UVM_ALL_ON)
+  `uvm_field_int (e,UVM_ALL_ON)
+  `uvm_field_int (err,UVM_ALL_ON)
+  `uvm_field_int (oflow,UVM_ALL_ON)
 
   `uvm_field_int (delay, UVM_DEFAULT)
-  `uvm_field_int (txn_id, UVM_DEFAULT | UVM_NOCOMPARE)
 
   `uvm_object_utils_end
 
   function new (string name = "alu_seq_item");
     super.new(name);
-    txn_id = count++;
   endfunction
 
   constraint c1_mode
@@ -69,9 +70,7 @@ class alu_seq_item extends uvm_sequence_item;
   }
   constraint c4_delay
   { 
-     solve delay before opa;
-     solve delay before opb;
-     delay inside {[0: 16]};                
+    delay inside {[0:15]};                
   }
 
 endclass: alu_seq_item

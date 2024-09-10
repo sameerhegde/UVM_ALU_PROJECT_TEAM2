@@ -8,7 +8,7 @@
 // Copyright    : 2024(c) Manipal Center of Excellence. All rights reserved.
 //------------------------------------------------------------------------------
 
-`timescale 10ns / 100ps   // Time Unit (ns) / Precision(ps)
+`timescale 1ns / 1ns   // Time Unit (ns) / Precision(ps)
 
 `define DATA_WIDTH 8    
 `define CMD_WIDTH 4

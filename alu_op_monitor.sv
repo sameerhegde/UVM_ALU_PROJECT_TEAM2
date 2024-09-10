@@ -32,9 +32,10 @@ class alu_op_monitor extends uvm_monitor;
   endfunction
 
   virtual task run_phase(uvm_phase phase);
+    repeat(2) @(posedge `OP_IF);
     forever 
        begin
-          @(posedge vif.MON.clk);
+         @(posedge `OP_IF);
              op_mon_h.cout =`OP_IF.cout;
              op_mon_h.oflow = `OP_IF.oflow;
              op_mon_h.res = `OP_IF.res;
@@ -43,10 +44,12 @@ class alu_op_monitor extends uvm_monitor;
              op_mon_h.l = `OP_IF.l;
              op_mon_h.e = `OP_IF.e;
              
-        item_collected_port.write(op_mon_h);
+             item_collected_port.write(op_mon_h);
          `uvm_info("OUTPUT MONITOR",$sformatf(" [%0t] res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",$time,op_mon_h.res,op_mon_h.oflow,op_mon_h.cout,op_mon_h.g,op_mon_h.l,op_mon_h.e,op_mon_h.err),UVM_LOW)
+         repeat(1) @(posedge `OP_IF);
     end 
   endtask
 
 endclass
+
 

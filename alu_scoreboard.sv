@@ -32,8 +32,6 @@ class alu_scb extends uvm_scoreboard;
   alu_seq_item exp_trans;
   alu_seq_item act_trans;
   
-  int MATCH;
-  int MISMATCH;
 
   // Build phase
   function void build_phase (uvm_phase phase);
@@ -43,7 +41,7 @@ class alu_scb extends uvm_scoreboard;
     if (!uvm_config_db #(virtual alu_if)::get(this, "", "vif", vif))
       `uvm_fatal ("No vif", {"Set virtual interface to: ", get_full_name (), ".vif"});
   endfunction: build_phase
- 
+  
   virtual function void write_ip_mon (alu_seq_item item);
     ip_queue.push_back(item);
   endfunction
@@ -52,271 +50,258 @@ class alu_scb extends uvm_scoreboard;
     op_queue.push_back(item);
   endfunction
   
-  function void match(alu_seq_item exp_trans, alu_seq_item act_trans); 
-    MATCH++;
+  extern function void single_op_arithmetic(alu_seq_item exp_trans, alu_seq_item act_trans);
+    extern function void two_op_arithmetic( alu_seq_item exp_trans,  alu_seq_item act_trans);
+      extern function void single_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans); 
+  extern task run_phase(uvm_phase phase);
     
-    `uvm_info("SEQUENCE_MATCHED","Matched",UVM_LOW);
-    `uvm_info("MATCH", $sformatf("match count = %0d", MATCH), UVM_LOW);
-	endfunction
-     
-
-  function void mismatch(alu_seq_item exp_trans, alu_seq_item act_trans);	  
-    MISMATCH++; 	
-    `uvm_info("SEQUENCE_MISMATCHED","Mismatched",UVM_LOW);
-    `uvm_info("MISMATCH", $sformatf("mismatch count = %0d", MISMATCH), UVM_LOW);
+endclass
+    
+  int MATCH;
+  int MISMATCH;
+    
+    function void match(alu_seq_item exp_trans, alu_seq_item act_trans); 
+      MATCH++;
+      `uvm_info("SEQUENCE_MATCHED","Matched",UVM_LOW);
+      `uvm_info("MATCH", $sformatf("match count = %0d", MATCH), UVM_LOW);
+    endfunction
+    
+    function void mismatch(alu_seq_item exp_trans, alu_seq_item act_trans);	  
+      MISMATCH++; 	
+      `uvm_info("SEQUENCE_MISMATCHED","Mismatched",UVM_LOW);
+      `uvm_info("MISMATCH", $sformatf("mismatch count = %0d", MISMATCH), UVM_LOW);
 	endfunction	
+  
+  
+  function void alu_scb::single_op_arithmetic(alu_seq_item exp_trans, alu_seq_item act_trans);
+    if(exp_trans.cmd inside {[4:7]})
+      begin
+        if(exp_trans.inp_valid==2'b01 || exp_trans.inp_valid ==2'b11)
+          begin
+            case(exp_trans.cmd)
+             4:begin //INC_A
+               exp_trans.res = exp_trans.opa + 1;
+               exp_trans.cout = exp_trans.res[`DATA_WIDTH];	
+               if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+             end 
+             5:begin //DEC_A
+               exp_trans.res = exp_trans.opa - 1;
+               exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+               if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+             end
+           endcase
+         end
+        else if(exp_trans.inp_valid == 2'b10 || exp_trans.inp_valid == 2'b11)
+          begin
+            case(exp_trans.cmd)
+              6:begin //INC_B
+                exp_trans.res = exp_trans.opb + 1'b1;
+                exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+              7:begin //DEC_B
+                exp_trans.res = exp_trans.opb - 1'b1;
+                exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+            endcase
+          end
+        else
+          `uvm_error("scoreboard","ERROR")
+      end
+  endfunction
+  
+  function void alu_scb::two_op_arithmetic(alu_seq_item exp_trans, alu_seq_item act_trans);
+        if(exp_trans.inp_valid == 2'b11)
+          begin
+            case(exp_trans.cmd)
+              0:begin //ADD
+                exp_trans.res = exp_trans.opa + exp_trans.opb;
+                exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+              1:begin //SUB
+                exp_trans.res = exp_trans.opa - exp_trans.opb;
+                exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+              2:begin //ADD_CIN
+                exp_trans.res = exp_trans.opa + exp_trans.opb + exp_trans.cin;
+                exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                  match(exp_trans,act_trans);
+		     	else 
+                  mismatch(exp_trans,act_trans);
+              end
+              3:begin //ADD_CIN
+                exp_trans.res = exp_trans.opa - exp_trans.opb - exp_trans.cin;
+                exp_trans.cout = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+              8:begin //CMP
+                if (exp_trans.opa > exp_trans.opb)
+                  begin
+                    exp_trans.g = 'b1;
+                    exp_trans.l = 0;
+                    exp_trans.e = 0;
+                  end
+                else if (exp_trans.opa < exp_trans.opb)
+                  begin
+                    exp_trans.l = 'b1;
+                    exp_trans.g = 0;
+                    exp_trans.e = 0;
+                  end
+                else
+                  begin
+                    exp_trans.e = 'b1;
+                    exp_trans.g = 0;
+                    exp_trans.l = 0;
+                  end
+                if((act_trans.e == exp_trans.e) && (act_trans.g == exp_trans.g) && (act_trans.l == exp_trans.l))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+              9:begin
+                exp_trans.res = (exp_trans.opa + 1'b1) * (exp_trans.opb + 1'b1);
+                exp_trans.oflow = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.oflow == exp_trans.oflow))
+                  match(exp_trans,act_trans);
+		     	else 
+                  mismatch(exp_trans,act_trans);
+              end
+              10:begin
+                exp_trans.res = (exp_trans.opa << 1) * exp_trans.opb;
+                exp_trans.oflow = exp_trans.res[`DATA_WIDTH];
+                if((act_trans.res == exp_trans.res)&&(act_trans.oflow == exp_trans.oflow))
+                  match(exp_trans,act_trans);
+                else 
+                  mismatch(exp_trans,act_trans);
+              end
+            endcase
+          end
+  endfunction
     
-  task run_phase (uvm_phase phase);
+    function void alu_scb::single_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans);
+  if(exp_trans.cmd inside {[6:11]})
+    begin
+      if(exp_trans.inp_valid == 2'b01 || exp_trans.inp_valid == 2'b11)
+        begin
+          case(exp_trans.cmd)
+            6:begin //NOT A
+              exp_trans.res = ~(exp_trans.opa);
+              if(act_trans.res == exp_trans.res)
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+            end
+            8:begin //SHR A
+              exp_trans.res =exp_trans.opa >> 1;
+              if(act_trans.res == exp_trans.res)
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+            end
+            9:begin //SHL A
+              exp_trans.res = exp_trans.opa << 1;
+              if(act_trans.res == exp_trans.res)
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+            end
+          endcase
+        end
+      else if(exp_trans.inp_valid == 2'b10 || exp_trans.inp_valid == 2'b11)
+        begin
+          case(exp_trans.cmd)
+            7:begin //NOT B
+              exp_trans.res = ~(exp_trans.opb);
+              if(act_trans.res == exp_trans.res)
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+            end
+            10:begin //SHR B
+              exp_trans.res = exp_trans.opb >> 1;
+              if(act_trans.res == exp_trans.res)
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+            end
+            11:begin //SHL B
+              exp_trans.res = exp_trans.opb << 1;
+              if(act_trans.res == exp_trans.res)
+                 match(exp_trans,act_trans);
+               else 
+                 mismatch(exp_trans,act_trans);
+            end
+          endcase
+        end
+      else
+        `uvm_error("scoreboard","Error");
+    end
+endfunction
+        
+    task alu_scb::run_phase (uvm_phase phase);
    super.run_phase(phase);
      forever begin   
         wait(ip_queue.size() > 0 && op_queue.size() > 0)
        begin
-        exp_trans = ip_queue.pop_front();
-        act_trans = op_queue.pop_front();
-        
-        compare(exp_trans,act_trans);
+         exp_trans = ip_queue.pop_front();
+         act_trans = op_queue.pop_front();
+         
+         if(exp_trans.ce ==1)
+           begin
+             if(exp_trans.mode ==1)
+               begin
+                 if(exp_trans.cmd inside {[4:7]})
+                   single_op_arithmetic(exp_trans,act_trans);
+                 else
+                   two_op_arithmetic(exp_trans,act_trans);
+               end
+             else
+               begin
+                 if(exp_trans.cmd inside {[6:11]})
+                   single_op_logical(exp_trans,act_trans);
+                 else
+                   //two_op_arithmetic(exp_trans,act_trans);
+                   $display("no");
+               end
+           end
+         
+         if(vif.rst)
+           begin
+             exp_trans.res <= 'bz;
+             exp_trans.cout <= 'bz;
+             exp_trans.oflow <= 'bz;
+             exp_trans.g <= 'bz;
+             exp_trans.l <= 'bz;
+             exp_trans.e <= 'bz;
+             exp_trans.err <= 'bz;
+           end
        end
      end
 endtask
-
-  task compare(alu_seq_item exp_trans,alu_seq_item act_trans);
-    
-     
-  $display(" [%0t] COMPARE mode = %d ip_valid = %d  cmd = %d  opa = %d opb = %d  ce = %d cin = %d",$time,exp_trans.mode,exp_trans.inp_valid,exp_trans.cmd,exp_trans.opa,exp_trans.opb,exp_trans.ce,exp_trans.cin);
-    
-    
-  $display(" [%0t] COMPARE RUN PHASE res = %d oflow = %d  cout = %d g = %d  l = %d e = %d err =%d",$time,act_trans.res,act_trans.oflow,act_trans.cout,act_trans.g,act_trans.l,act_trans.e,act_trans.err);
-    
-    if(exp_trans.ce ==1)
-      begin
-        if(exp_trans.mode ==1)
-          begin
-              case(exp_trans.cmd)
-            	0:begin
-                  if(exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opa + exp_trans.opb;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                1:begin
-                  if(exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opa - exp_trans.opb;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                2:begin
-                  if (exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opa + exp_trans.opb + exp_trans.cin;
-                  	  exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                3:begin
-                  if (exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opa - exp_trans.opb - exp_trans.cin;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                4:begin
-                  if (exp_trans.inp_valid == 2'b01 || exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opa + 1'b1;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                5:begin
-                  if (exp_trans.inp_valid == 2'b01 || exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opa - 1'b1;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                6:begin
-                  if (exp_trans.inp_valid == 2'b10 || exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opb + 1'b1;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                7:begin
-                  if (exp_trans.inp_valid == 2'b10 || exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = exp_trans.opb - 1'b1;
-                      exp_trans.cout = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                8:begin
-                  if (exp_trans.inp_valid == 2'b11) 
-                    begin
-                      if (exp_trans.opa > exp_trans.opb)
-                        begin
-                          exp_trans.g = 'b1;
-                          exp_trans.l = 0;
-                          exp_trans.e = 0;
-                        end
-                      else if (exp_trans.opa < exp_trans.opb)
-                        begin
-                          exp_trans.l = 'b1;
-                          exp_trans.g = 0;
-                          exp_trans.e = 0;
-                        end
-                      else
-                        begin
-                          exp_trans.e = 'b1;
-                          exp_trans.g = 0;
-                          exp_trans.l = 0;
-                        end
-                    end
-                  if((act_trans.e == exp_trans.e) && (act_trans.g == exp_trans.g) && (act_trans.l == exp_trans.l))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                9:begin
-                  if (exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = (exp_trans.opa + 1'b1) * (exp_trans.opb + 1'b1);
-                      exp_trans.oflow = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.oflow == exp_trans.oflow))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                10:begin
-                  if (exp_trans.inp_valid == 2'b11)
-                    begin
-                      exp_trans.res = (exp_trans.opa << 1) * exp_trans.opb;
-                      exp_trans.oflow = exp_trans.res[`DATA_WIDTH];
-                    end
-                  if((act_trans.res == exp_trans.res)&&(act_trans.oflow == exp_trans.oflow))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-                end
-                  
-            default: exp_trans.res = 'bz;
-          endcase
-        end
-        else
-          begin
-            case(exp_trans.cmd)
-              
-              0:begin
-                if(exp_trans.inp_valid == 2'b11)
-                  begin
-                    exp_trans.res = exp_trans.opa && exp_trans.opb;
-                  end
-                if((act_trans.res == exp_trans.res))
-                    match(exp_trans,act_trans);
-		     	  else 
-                    mismatch(exp_trans,act_trans);
-              end
-              
-            1:begin
-              if(exp_trans.inp_valid == 2'b11)
-                exp_trans.res = ~(exp_trans.opa && exp_trans.opb);
-              else
-                exp_trans.res = 'bz;
-            end
-            2:begin
-              if(exp_trans.inp_valid == 2'b11)
-                exp_trans.res = exp_trans.opa || exp_trans.opb;
-              else
-                exp_trans.res = 'bz;
-            end
-            3:begin
-              if(exp_trans.inp_valid == 2'b11)
-                exp_trans.res = ~(exp_trans.opa || exp_trans.opb);
-              else
-                exp_trans.res = 'bz;
-            end
-            4:begin
-              if(exp_trans.inp_valid == 2'b11)
-                exp_trans.res = exp_trans.opa ^ exp_trans.opb;
-              else
-                exp_trans.res = 'bz;
-            end
-            5:begin
-              if(exp_trans.inp_valid == 2'b11)
-                exp_trans.res = ~(exp_trans.opa ^ exp_trans.opb);
-              else
-                exp_trans.res = 'bz;
-            end
-            6:begin
-              if(exp_trans.inp_valid == 2'b01)
-                exp_trans.res = ~ exp_trans.opa;
-              else
-                exp_trans.res = 'bz;
-            end
-            7:begin
-              if(exp_trans.inp_valid == 2'b10)
-                exp_trans.res = ~ exp_trans.opb;
-              else
-                exp_trans.res = 'bz;
-            end
-            8:begin
-              if(exp_trans.inp_valid == 2'b01)
-                exp_trans.res =  exp_trans.opa >> 1;
-              else
-                exp_trans.res = 'bz;
-            end
-            9:begin
-              if(exp_trans.inp_valid == 2'b01)
-                exp_trans.res =  exp_trans.opa << 1;
-              else
-                exp_trans.res = 'bz;
-            end
-            10:begin
-              if(exp_trans.inp_valid == 2'b10)
-                exp_trans.res =  exp_trans.opb >> 1;
-              else
-                exp_trans.res = 'bz;
-            end
-            11:begin
-              if(exp_trans.inp_valid == 2'b10)
-                exp_trans.res =  exp_trans.opb << 1;
-              else
-                exp_trans.res = 'bz;
-            end
-          endcase
-        end
-    end
-  endtask
-endclass
    
+  

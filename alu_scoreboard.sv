@@ -188,7 +188,7 @@ endclass
                 else 
                   mismatch(exp_trans,act_trans);
               end
-              9:begin
+              9:begin //INC-OPA MUL-OPB
                 exp_trans.res = (exp_trans.opa + 1'b1) * (exp_trans.opb + 1'b1);
                 exp_trans.oflow = exp_trans.res[`DATA_WIDTH];
                 if((act_trans.res == exp_trans.res)&&(act_trans.oflow == exp_trans.oflow))
@@ -196,7 +196,7 @@ endclass
 		     	else 
                   mismatch(exp_trans,act_trans);
               end
-              10:begin
+              10:begin //LEFT_SHIFT-OPA MUL-OPB
                 exp_trans.res = (exp_trans.opa << 1) * exp_trans.opb;
                 exp_trans.oflow = exp_trans.res[`DATA_WIDTH];
                 if((act_trans.res == exp_trans.res)&&(act_trans.oflow == exp_trans.oflow))
@@ -320,6 +320,44 @@ endfunction
           else 
             mismatch(exp_trans,act_trans);
         end
+        12:begin //ROL
+          if(exp_trans.opb[7:4] > 0) begin
+            exp_trans.err = 1;
+          end
+          case(exp_trans.opb[2:0])
+            3'b000: exp_trans.res = {1'b0,exp_trans.opa};
+            3'b001: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-2:0], exp_trans.opa[`DATA_WIDTH-1]}};
+            3'b010: exp_trans.res = {1'b0, {exp_trans.opa[`DATA_WIDTH-3:0], exp_trans.opa[`DATA_WIDTH-1:6]}};
+            3'b011: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-4:0], exp_trans.opa[`DATA_WIDTH-1:5]}};
+            3'b100: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-5:0], exp_trans.opa[`DATA_WIDTH-1:4]}};
+            3'b101: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-6:0], exp_trans.opa[`DATA_WIDTH-1:3]}};
+            3'b110: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-7:0], exp_trans.opa[`DATA_WIDTH-1:2]}};
+            3'b111: exp_trans.res = {1'b0,{exp_trans.opa[0], exp_trans.opa[`DATA_WIDTH-1:1]}};
+          endcase
+          if(exp_trans.res == act_trans.res)
+            match(exp_trans, act_trans);
+          else
+            mismatch(exp_trans, act_trans);
+        end
+         13:begin //ROR
+           if(exp_trans.opb[7:4] > 0) begin
+             exp_trans.err = 1;
+           end
+           case(exp_trans.opb[2:0])
+             3'b000: exp_trans.res = {1'b0,exp_trans.opa};
+             3'b001: exp_trans.res = {1'b0,{exp_trans.opa[0], exp_trans.opa[`DATA_WIDTH-1:1]}};
+             3'b010: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-7:0], exp_trans.opa[`DATA_WIDTH-1:2]}};
+             3'b011: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-6:0], exp_trans.opa[`DATA_WIDTH-1:3]}};
+             3'b100: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-5:0], exp_trans.opa[`DATA_WIDTH-1:4]}};
+             3'b101: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-4:0], exp_trans.opa[`DATA_WIDTH-1:5]}};
+             3'b110: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-3:0], exp_trans.opa[`DATA_WIDTH-1:6]}};
+             3'b111: exp_trans.res = {1'b0,{exp_trans.opa[`DATA_WIDTH-2:0], exp_trans.opa[`DATA_WIDTH-1]}};
+           endcase
+           if(exp_trans.res == act_trans.res)
+             match(exp_trans, act_trans);
+           else
+             mismatch(exp_trans, act_trans);
+         end
       endcase
       `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
             `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)

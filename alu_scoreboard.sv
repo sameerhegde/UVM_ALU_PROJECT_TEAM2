@@ -51,8 +51,9 @@ class alu_scb extends uvm_scoreboard;
   endfunction
   
   extern function void single_op_arithmetic(alu_seq_item exp_trans, alu_seq_item act_trans);
-    extern function void two_op_arithmetic( alu_seq_item exp_trans,  alu_seq_item act_trans);
-      extern function void single_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans); 
+  extern function void two_op_arithmetic( alu_seq_item exp_trans,  alu_seq_item act_trans);
+  extern function void single_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans); 
+  extern function void two_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans);   
   extern task run_phase(uvm_phase phase);
     
 endclass
@@ -96,6 +97,8 @@ endclass
                  mismatch(exp_trans,act_trans);
              end
            endcase
+            `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
+            `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
          end
         else if(exp_trans.inp_valid == 2'b10 || exp_trans.inp_valid == 2'b11)
           begin
@@ -117,6 +120,8 @@ endclass
                   mismatch(exp_trans,act_trans);
               end
             endcase
+            `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
+            `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
           end
         else
           `uvm_error("scoreboard","ERROR")
@@ -200,10 +205,12 @@ endclass
                   mismatch(exp_trans,act_trans);
               end
             endcase
+                 `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
+            `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
           end
   endfunction
-    
-    function void alu_scb::single_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans);
+        
+         function void alu_scb::single_op_logical(alu_seq_item exp_trans, alu_seq_item act_trans);
   if(exp_trans.cmd inside {[6:11]})
     begin
       if(exp_trans.inp_valid == 2'b01 || exp_trans.inp_valid == 2'b11)
@@ -231,6 +238,8 @@ endclass
                  mismatch(exp_trans,act_trans);
             end
           endcase
+          `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
+            `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
         end
       else if(exp_trans.inp_valid == 2'b10 || exp_trans.inp_valid == 2'b11)
         begin
@@ -257,12 +266,69 @@ endclass
                  mismatch(exp_trans,act_trans);
             end
           endcase
+          `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
+            `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
         end
       else
         `uvm_error("scoreboard","Error");
     end
 endfunction
         
+   function void alu_scb :: two_op_logical(alu_seq_item exp_trans,alu_seq_item act_trans);
+  if(exp_trans.inp_valid == 2'b11)
+    begin
+      case(exp_trans.cmd)
+        0:begin //AND
+          exp_trans.res = exp_trans.opa & exp_trans.opb;
+          if((act_trans.res == exp_trans.res)&&(act_trans.cout == exp_trans.cout))
+            match(exp_trans,act_trans);
+          else 
+            mismatch(exp_trans,act_trans);
+        end
+        1:begin //NAND
+          exp_trans.res = ~(exp_trans.opa & exp_trans.opb);
+          if(act_trans.res == exp_trans.res)
+            match(exp_trans,act_trans);
+          else 
+            mismatch(exp_trans,act_trans);
+        end
+        2:begin //OR
+          exp_trans.res = exp_trans.opa | exp_trans.opb;
+          if(act_trans.res == exp_trans.res)
+            match(exp_trans,act_trans);
+          else 
+            mismatch(exp_trans,act_trans);
+        end
+        3:begin //NOR
+          exp_trans.res = ~(exp_trans.opa | exp_trans.opb);
+          if(act_trans.res == exp_trans.res)
+            match(exp_trans,act_trans);
+          else 
+            mismatch(exp_trans,act_trans);
+        end
+        4:begin //XOR
+          exp_trans.res = exp_trans.opa ^ exp_trans.opb;
+          if(act_trans.res == exp_trans.res)
+            match(exp_trans,act_trans);
+          else 
+            mismatch(exp_trans,act_trans);
+        end
+        5:begin //XNOR
+          exp_trans.res = ~(exp_trans.opa ^ exp_trans.opb);
+          if(act_trans.res == exp_trans.res)
+            match(exp_trans,act_trans);
+          else 
+            mismatch(exp_trans,act_trans);
+        end
+      endcase
+      `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
+            `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
+    end
+  else
+    `uvm_error("scoreboard","error")
+endfunction 
+    
+    
     task alu_scb::run_phase (uvm_phase phase);
    super.run_phase(phase);
      forever begin   
@@ -285,11 +351,9 @@ endfunction
                  if(exp_trans.cmd inside {[6:11]})
                    single_op_logical(exp_trans,act_trans);
                  else
-                   //two_op_arithmetic(exp_trans,act_trans);
-                   $display("no");
+                   two_op_logical(exp_trans,act_trans);
                end
            end
-         
          if(vif.rst)
            begin
              exp_trans.res <= 'bz;

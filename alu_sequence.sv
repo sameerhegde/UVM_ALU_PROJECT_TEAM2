@@ -490,7 +490,10 @@ endclass
 //   endfunction
 
 //   virtual task body();
-//   txn.randomize()with {
+
+//     alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
+//         txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
 //       txn.cmd == 4'b0000;
@@ -498,7 +501,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -537,11 +540,13 @@ endclass
 //   function new(string name = "alu_nand_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //  virtual task body();
+//      txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -550,7 +555,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -589,11 +594,13 @@ endclass
 //   function new(string name = "alu_or_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //   virtual task body();
+//    txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -602,7 +609,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -640,11 +647,13 @@ endclass
 //   function new(string name = "alu_nor_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //   virtual task body();
+//     txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -653,7 +662,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -692,11 +701,13 @@ endclass
 //   function new(string name = "alu_xor_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //   virtual task body();
+//    txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -705,7 +716,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -744,11 +755,13 @@ endclass
 //   function new(string name = "alu_xnor_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //  virtual task body();
+//   txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -757,7 +770,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -795,11 +808,13 @@ endclass
 //   function new(string name = "alu_not_opa_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
-// //    virtual task body();
+//     virtual task body();
+//       txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -808,7 +823,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if( txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -847,11 +862,13 @@ endclass
 //   function new(string name = "alu_not_opb_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
-// //    virtual task body();
+//     virtual task body();
+//      txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -860,7 +877,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -902,8 +919,10 @@ endclass
 
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
-  
+
 //    virtual task body();
+//    txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -912,7 +931,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -951,11 +970,13 @@ endclass
 //   function new(string name = "alu_shl1_opa_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //   virtual task body();
+//    txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -964,7 +985,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b10 ) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -1002,11 +1023,13 @@ endclass
 //   function new(string name = "alu_shr1_opb_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //    virtual task body();
+//      txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -1015,7 +1038,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 ) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -1054,11 +1077,13 @@ endclass
 //   function new(string name = "alu_shl1_opb_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //   virtual task body();
+//     txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -1067,7 +1092,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 ) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -1106,11 +1131,13 @@ endclass
 //   function new(string name = "alu_ror_opa_opb_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //   virtual task body();
+//      txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -1119,7 +1146,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);
@@ -1158,11 +1185,13 @@ endclass
 //   function new(string name = "alu_rol_opa_opb_seq");
 //     super.new(name);
 //   endfunction
-  
+
 //    // Handle for alu_seq_item
 //   alu_seq_item txn;
 
 //  virtual task body();
+//      txn = alu_seq_item::type_id::create("txn");
+//     wait_for_grant();
 //   txn.randomize()with {
 //       txn.mode == 0;
 //       txn.ce == 1; 
@@ -1171,7 +1200,7 @@ endclass
 //     };
 //     send_request(txn);
 //     wait_for_item_done();
-   
+
 //     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
 //      txn.opa.rand_mode(0); 
 //      txn.opb.rand_mode(0);

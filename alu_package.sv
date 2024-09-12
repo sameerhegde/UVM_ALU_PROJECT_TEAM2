@@ -23,5 +23,6 @@ import uvm_pkg::*;
 `include "alu_agent_active.sv"
 `include "alu_agent_passive.sv"
 `include "alu_scoreboard.sv"
+`include "alu_coverage.sv"
 `include "alu_environment.sv"
 `include "alu_test.sv"

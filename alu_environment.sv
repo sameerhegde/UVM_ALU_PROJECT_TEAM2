@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 
+
 class alu_env extends uvm_env;
 
   `uvm_component_utils(alu_env)
@@ -20,22 +21,22 @@ class alu_env extends uvm_env;
   alu_agent_active act_h;
   alu_agent_passive pass_h;
   alu_scb scb_h;
-  //alu_cov cov_h;
+  alu_cov cov_h;
 
   virtual function void build_phase(uvm_phase phase);
     super.build_phase(phase);
    act_h = alu_agent_active::type_id::create("act_h", this);
    pass_h = alu_agent_passive::type_id::create("pass_h", this);
    scb_h = alu_scb::type_id::create("scb_h", this);
-   //cov_h =alu_cov::type_id::create("cov_h",this);
+   cov_h =alu_cov::type_id::create("cov_h",this);
   endfunction
 
   virtual function void connect_phase(uvm_phase phase);
     super.connect_phase(phase);
     act_h.mon_ip.item_collected_port.connect(scb_h.ip_mon_port);
-    //act_h.mon_ip.item_collected_port.connect(cov_h.mon_ip_imp);
+    act_h.mon_ip.item_collected_port.connect(cov_h.mon_ip_imp);
     pass_h.mon_op.item_collected_port.connect(scb_h.op_mon_port);
-    //pass_h.mon_op.item_collected_port.connect(cov_h.mon_op_imp); 
+    pass_h.mon_op.item_collected_port.connect(cov_h.mon_op_imp); 
   endfunction
 
 endclass: alu_env

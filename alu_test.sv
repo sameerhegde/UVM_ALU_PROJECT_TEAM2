@@ -348,22 +348,17 @@ endclass: alu_lshift_mul
 
 class alu_and extends alu_test;
   `uvm_component_utils(alu_and)
- 
   alu_and_seq seq_and;
- 
   function new (string name = "alu_and", uvm_component parent);
     super.new (name, parent);
   endfunction: new
- 
   virtual function void build_phase (uvm_phase phase);
     super.build_phase (phase);
     seq_and = alu_and_seq::type_id::create("seq_and");
   endfunction: build_phase
- 
   virtual function void end_of_elaboration ();
     print ();
   endfunction: end_of_elaboration
- 
   task run_phase (uvm_phase phase);
     phase.raise_objection (this);
    repeat(`NUM_TRANSACTIONS) begin
@@ -371,7 +366,6 @@ class alu_and extends alu_test;
     end
     phase.drop_objection (this);
   endtask: run_phase
- 
 endclass: alu_and
 
 class alu_nand extends alu_test;

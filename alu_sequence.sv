@@ -478,18 +478,18 @@ endclass
   
 
 class alu_and_seq extends alu_seq;
-
+ 
   `uvm_object_utils(alu_and_seq)
-
+ 
   function new(string name = "alu_and_seq");
     super.new(name);
   endfunction
-
-  virtual task body();
-
-    alu_seq_item::type_id::create("txn");
-    wait_for_grant();
-        txn.randomize()with {
+  alu_seq_item txn;
+ 
+    virtual task body();
+    txn = alu_seq_item::type_id::create("txn");
+    wait_for_grant();  
+      txn.randomize()with {
       txn.mode == 0;
       txn.ce == 1; 
       txn.cmd == 4'b0000;
@@ -497,7 +497,6 @@ class alu_and_seq extends alu_seq;
     };
     send_request(txn);
     wait_for_item_done();
-
     if(txn.inp_valid == 2'b01 || txn.inp_valid == 2'b10) begin
      txn.opa.rand_mode(0); 
      txn.opb.rand_mode(0);

@@ -50,7 +50,7 @@ module top ();
      
      initial begin
 
-       run_test("alu_add");
+        run_test("alu_regression");
      end
   
 endmodule

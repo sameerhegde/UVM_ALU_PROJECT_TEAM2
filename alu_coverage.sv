@@ -28,12 +28,13 @@ class alu_cov extends uvm_subscriber #(alu_seq_item);
       bins inp_valid_10={2'b10};
       bins inp_valid_11={2'b11};
     }
-    coverpoint seq_item_wr.mode{
+    MODE: coverpoint seq_item_wr.mode{
       bins mode_0 ={0};
       bins mode_1={1};
     } 
-    coverpoint seq_item_wr.cmd{
+    CMD: coverpoint seq_item_wr.cmd{
       bins cmd[]={[0:$]};
+      ignore_bins b1 ={14,15};
     }
     coverpoint seq_item_wr.ce{
       bins ce_0={0};
@@ -49,6 +50,8 @@ class alu_cov extends uvm_subscriber #(alu_seq_item);
       bins cin_0={0};
       bins cin_1={1};
     }
+    MODE_CMD : cross  MODE,CMD 
+            { ignore_bins b2= binsof(CMD) intersect {11,12,13} && binsof(MODE) intersect {1};}
   endgroup:fun_cov_wr
 
                  covergroup fun_cov_rd;

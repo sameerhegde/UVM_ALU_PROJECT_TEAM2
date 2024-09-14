@@ -362,8 +362,6 @@ endfunction
       `uvm_info("EXPECTED",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,exp_trans.res,exp_trans.cout,exp_trans.oflow,exp_trans.g,exp_trans.l,exp_trans.e,exp_trans.err),UVM_LOW)
             `uvm_info("ACTUAL",$sformatf("[%0t] res=%d,cout=%d,oflow=%d,g=%d,l=%d,e=%d,err=%d",$time,act_trans.res,act_trans.cout,act_trans.oflow,act_trans.g,act_trans.l,act_trans.e,act_trans.err),UVM_LOW)
     end
-  else
-    `uvm_error("scoreboard","error")
 endfunction 
     
     

@@ -1,0 +1,7 @@
+var g_db_data = [
+{dummy:0},
+{name:'fun_cov_wr',f:1,type:6,id:1623,tb:'50',h:'50',m:'0',hp:'100.00%',cov:['100.00%','G'],g:'100.00%',gp:['100.00%','G'],opts:[[],['merge_instance','auto(true)']],hdlPath:'/alu_top_sv_unit/alu_cov',parent:'1618'},
+{name:'fun_cov_rd',f:1,type:6,id:1632,tb:'13',h:'12',m:'1',hp:'92.30%',cov:['92.85%','G'],g:'100.00%',gp:['92.85%','G'],opts:[[],['merge_instance','auto(true)']],hdlPath:'/alu_top_sv_unit/alu_cov',parent:'1618'},
+{name:'fun_cov_wr',f:1,type:6,id:2576,tb:'50',h:'50',m:'0',hp:'100.00%',cov:['100.00%','G'],g:'100.00%',gp:['100.00%','G'],opts:[[],['merge_instance','true']],hdlPath:'work.alu_top_sv_unit::alu_cov',parent:'2571'},
+{name:'fun_cov_rd',f:1,type:6,id:2585,tb:'13',h:'12',m:'1',hp:'92.30%',cov:['92.85%','G'],g:'100.00%',gp:['92.85%','G'],opts:[[],['merge_instance','true']],hdlPath:'work.alu_top_sv_unit::alu_cov',parent:'2571'}];
+processConsCovergroupsData(g_db_data);

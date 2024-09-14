@@ -37,7 +37,6 @@ class alu_cov extends uvm_subscriber #(alu_seq_item);
       ignore_bins b1 ={14,15};
     }
     coverpoint seq_item_wr.ce{
-      bins ce_0={0};
       bins ce_1={1};
     }
     coverpoint seq_item_wr.opa{

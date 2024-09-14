@@ -1119,11 +1119,11 @@ class alu_shl1_opb_seq extends alu_seq;
   endtask
 endclass
 
-class alu_ror_opa_opb_seq extends alu_seq;
+class alu_rol_opa_opb_seq extends alu_seq;
 
-  `uvm_object_utils(alu_ror_opa_opb_seq)
+  `uvm_object_utils(alu_rol_opa_opb_seq)
 
-  function new(string name = "alu_ror_opa_opb_seq");
+  function new(string name = "alu_rol_opa_opb_seq");
     super.new(name);
   endfunction
 
@@ -1173,11 +1173,11 @@ class alu_ror_opa_opb_seq extends alu_seq;
   endtask
 endclass
 
-class alu_rol_opa_opb_seq extends alu_seq;
+class alu_ror_opa_opb_seq extends alu_seq;
 
-  `uvm_object_utils(alu_rol_opa_opb_seq)
+  `uvm_object_utils(alu_ror_opa_opb_seq)
 
-  function new(string name = "alu_rol_opa_opb_seq");
+  function new(string name = "alu_ror_opa_opb_seq");
     super.new(name);
   endfunction
 

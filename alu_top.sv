@@ -18,8 +18,9 @@ module top ();
     always #5 clk = ~clk;
     
     initial begin
-      rst = 0;
-      //#10 rst =0;
+       rst = 0;
+       #500 rst = 1;
+       #100 rst = 0;
      end
 
     alu_if intf(clk,rst);

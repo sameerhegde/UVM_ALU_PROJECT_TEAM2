@@ -687,6 +687,34 @@ endclass: alu_shr1_opb
 endclass: alu_shl1_opb
 
 
+class alu_rol_opa_opb extends alu_test;
+  `uvm_component_utils(alu_rol_opa_opb)
+ 
+  alu_rol_opa_opb_seq seq_rol_opa_opb;
+ 
+  function new (string name = "alu_rol_opa_opb", uvm_component parent);
+    super.new (name, parent);
+  endfunction: new
+ 
+  virtual function void build_phase (uvm_phase phase);
+    super.build_phase (phase);
+    seq_rol_opa_opb = alu_rol_opa_opb_seq::type_id::create("seq_rol_opa_opb");
+  endfunction: build_phase
+ 
+  virtual function void end_of_elaboration ();
+    print ();
+  endfunction: end_of_elaboration
+ 
+  task run_phase (uvm_phase phase);
+    phase.raise_objection (this);
+    repeat(`NUM_TRANSACTIONS) begin
+    seq_rol_opa_opb.start(env.act_h.sqr_h);
+    end
+    phase.drop_objection (this);
+  endtask: run_phase
+ 
+endclass: alu_rol_opa_opb
+
 
 class alu_ror_opa_opb extends alu_test;
   `uvm_component_utils(alu_ror_opa_opb)
@@ -716,37 +744,13 @@ class alu_ror_opa_opb extends alu_test;
  
 endclass: alu_ror_opa_opb
 
-
-class alu_rol_opa_opb extends alu_test;
-  `uvm_component_utils(alu_rol_opa_opb)
- 
-  alu_rol_opa_opb_seq seq_rol_opa_opb;
- 
-  function new (string name = "alu_rol_opa_opb", uvm_component parent);
-    super.new (name, parent);
-  endfunction: new
- 
-  virtual function void build_phase (uvm_phase phase);
-    super.build_phase (phase);
-    seq_rol_opa_opb = alu_rol_opa_opb_seq::type_id::create("seq_rol_opa_opb");
-  endfunction: build_phase
- 
-  virtual function void end_of_elaboration ();
-    print ();
-  endfunction: end_of_elaboration
- 
-  task run_phase (uvm_phase phase);
-    phase.raise_objection (this);
-    repeat(`NUM_TRANSACTIONS) begin
-    seq_rol_opa_opb.start(env.act_h.sqr_h);
-    end
-    phase.drop_objection (this);
-  endtask: run_phase
- 
-endclass: alu_rol_opa_opb
+//-------------------------------------------------------------
+// REGRESSION TEST
+//-------------------------------------------------------------
 
 class alu_regression extends alu_test;
   `uvm_component_utils(alu_regression)
+  
   alu_add_sequence seq_add;
   alu_sub_sequence seq_sub;
   alu_add_cin_seq  seq_add_cin;
@@ -772,11 +776,14 @@ class alu_regression extends alu_test;
   alu_shl1_opb_seq  seq_shl1_opb;
   alu_ror_opa_opb_seq seq_ror;
   alu_rol_opa_opb_seq seq_rol;
+  
   function new (string name = "alu_regression", uvm_component parent);
     super.new (name, parent);
   endfunction: new
+  
   virtual function void build_phase (uvm_phase phase);
     super.build_phase (phase);
+    
     seq_add = alu_add_sequence::type_id::create("seq_add");
     seq_sub = alu_sub_sequence::type_id::create("seq_sub");
     seq_add_cin = alu_add_cin_seq::type_id::create("seq_add_cin");
@@ -802,61 +809,190 @@ class alu_regression extends alu_test;
     seq_shl1_opb = alu_shl1_opb_seq::type_id::create("seq_shl1_opb");
     seq_ror = alu_ror_opa_opb_seq::type_id::create("seq_ror");
     seq_rol = alu_rol_opa_opb_seq::type_id::create("seq_rol");
+    
   endfunction: build_phase
+  
    virtual function void end_of_elaboration ();
     print ();
   endfunction: end_of_elaboration
+  
   task run_phase (uvm_phase phase);
+    
     phase.raise_objection (this);
-    seq_add.start(env.act_h.sqr_h);
-    #20;
-    seq_sub.start(env.act_h.sqr_h);
-    #20;
-    seq_add_cin.start(env.act_h.sqr_h);
-    #20;
-    seq_sub_cin.start(env.act_h.sqr_h);
-    #20;
-    seq_inc_opa.start(env.act_h.sqr_h);
-    #20;
-    seq_dec_opa.start(env.act_h.sqr_h);
-    #20;
-    seq_inc_opb.start(env.act_h.sqr_h);
-    #20;
-    seq_dec_opb.start(env.act_h.sqr_h);
-    #20;
-    seq_cmp.start(env.act_h.sqr_h);
-    #20;
-    seq_inc_mul.start(env.act_h.sqr_h);
-    #20;
-    seq_opa_lshift_mul.start(env.act_h.sqr_h);
-    #20;
-    seq_and.start(env.act_h.sqr_h);
-    #20;
-    seq_nand.start(env.act_h.sqr_h);
-    #20;
-    seq_or.start(env.act_h.sqr_h);
-    #20;
-    seq_nor.start(env.act_h.sqr_h);
-    #20;
-    seq_xor.start(env.act_h.sqr_h);
-    #20;
-    seq_xnor.start(env.act_h.sqr_h);
-    #20;
-    seq_not_opa.start(env.act_h.sqr_h);
-    #20;
-    seq_not_opb.start(env.act_h.sqr_h);
-    #20;
-    seq_shr1_opa.start(env.act_h.sqr_h);
-	#20;
-    seq_shl1_opa.start(env.act_h.sqr_h);
-   	#20;
-    seq_shr1_opb.start(env.act_h.sqr_h);
-    #20;
-    seq_shl1_opb.start(env.act_h.sqr_h);
-	#20;
-    seq_ror.start(env.act_h.sqr_h);
-    #20;
-    seq_rol.start(env.act_h.sqr_h);
+    repeat(10)
+      begin
+        seq_add.start(env.act_h.sqr_h);
+      end
     phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_sub.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_add_cin.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_sub_cin.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_inc_opa.start(env.act_h.sqr_h);
+        end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_dec_opa.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_inc_opb.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_dec_opb.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_cmp.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_inc_mul.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_opa_lshift_mul.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_and.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_nand.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_or.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_nor.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);  
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_xor.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_xnor.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_not_opa.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_not_opb.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_shr1_opa.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_shl1_opa.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_shr1_opb.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_shl1_opb.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_rol.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
+    phase.raise_objection (this);
+    repeat(10)
+      begin
+        seq_ror.start(env.act_h.sqr_h);
+      end
+    phase.drop_objection (this);
+    
   endtask: run_phase
+  
 endclass
